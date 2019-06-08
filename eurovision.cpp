@@ -48,3 +48,8 @@ void Participant::update(string songName, int songDuration, string singerName){
 void Participant::updateRegistered(bool registration) {
 	this->registration = Registration;
 }
+
+ostream& operator<<(ostream& os, const Participant& participant) {
+	return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength() <<
+		'/' << participant.singer() << ']' << endl;
+}

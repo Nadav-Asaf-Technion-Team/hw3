@@ -87,7 +87,7 @@ private:
 	int maxTimeLength;
 	int maxParticipants;
 	int maxVotes;
-	ContendersArray contenders; //should figure out where to define it
+	//ContendersArray contenders; //should figure out where to define it
 
 public:
 

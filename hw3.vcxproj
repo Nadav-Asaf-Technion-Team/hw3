@@ -24,6 +24,7 @@
   <ItemGroup>
     <ClCompile Include="eurovision.cpp" />
     <ClCompile Include="test1.cpp" />
+    <ClCompile Include="testMain.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
