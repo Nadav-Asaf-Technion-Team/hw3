@@ -82,7 +82,10 @@ struct Vote
 	// ALL is public here.
 	// need to define ONLY data members and c'tr and d'tr.
 	// NO NEED to define anything else.
-
+	Voter voter;
+	string to;
+	Vote(const Voter& voter, const string to);
+	~Vote() = default;
 };
 
 // -----------------------------------------------------------

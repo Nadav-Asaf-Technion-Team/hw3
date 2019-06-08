@@ -84,3 +84,8 @@ ostream& operator<<(ostream& os, const Voter& voter) {
 		type = "Judge";
 	return os << '<' << voter.state() << '/' << type << '<';
 }
+
+Vote::Vote(const Voter& voter, const string to) :
+	voter(voter), to(to) {
+
+}
