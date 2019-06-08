@@ -53,3 +53,34 @@ ostream& operator<<(ostream& os, const Participant& participant) {
 	return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength() <<
 		'/' << participant.singer() << ']' << endl;
 }
+
+Voter::Voter(string state, VoterType type) :
+	voterState(state), type(type), timesVoted(0) {
+
+}
+
+string Voter::state() const {
+	return voterState;
+}
+
+VoterType Voter::voterType() const {
+	return type;
+}
+
+int Voter::timesOfVotes() const {
+	return timesVoted;
+}
+
+Voter& Voter::operator++() {
+	timesVoted++;
+	return *this;
+}
+
+ostream& operator<<(ostream& os, const Voter& voter) {
+	string type = "";
+	if (voter.voterType() == Regular)
+		type = "Regular";
+	else
+		type = "Judge";
+	return os << '<' << voter.state() << '/' << type << '<';
+}

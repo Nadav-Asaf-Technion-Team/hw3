@@ -53,6 +53,9 @@ ostream& operator<<(ostream& os, const Participant& participant);
 class Voter
 {
 	// relevant private members can be defined here, if necessary.
+	const VoterType type;
+	const string voterState;
+	int timesVoted;
 
 public:
 
@@ -61,9 +64,15 @@ public:
 	// NO OTHER METHODS SHOULD APPEAR HERE.
 
 	// NO friend is allowed here.
-
+	Voter(const string state, VoterType type = Regular);
+	~Voter() = default;
+	string state() const;
+	VoterType voterType() const;
+	int timesOfVotes() const;
+	Voter& operator++();
 };
 
+ostream& operator<<(ostream& os, const Voter& voter);
 
 // -----------------------------------------------------------
 
