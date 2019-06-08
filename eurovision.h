@@ -22,7 +22,7 @@ class Participant
 private:
 	const string stateName;
 	string songName;
-	int timeLength;
+	int songDuration;
 	string singerName;
 	int registration;
 
@@ -33,14 +33,14 @@ public:
 	// NO OTHER METHODS SHOULD APPEAR HERE.
 
 	// NO friend is allowed here.
-	Participant(string stateName, string songName, int timeLength, string singerName);
-	~Participant();
-	string state();
-	string song();
-	int timeLength();
-	string singer();
-	int isRegistered();
-	void update(string songName, int timeLength, string singerName);
+	Participant(string stateName, string songName, int songDuration, string singerName);
+	~Participant() = default;
+	string state() const;
+	string song()const;
+	int timeLength() const;
+	string singer() const;
+	int isRegistered() const;
+	void update(string songName, int songDuration, string singerName);
 	void updateRegistered(bool registration);
 
 };
