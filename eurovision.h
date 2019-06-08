@@ -7,6 +7,9 @@
 // it's allowed to define here any using statements, according to needs.
 // do NOT define here : using namespace std;
 using std::string;
+using std::ostream;
+using std::cout;
+using std::endl;
 //---------------------------------------------------
 
 enum VoterType { All, Regular, Judge };
@@ -16,7 +19,12 @@ enum Phase { Registration, Contest, Voting };
 
 class Participant
 {
-	// relevant private members can be defined here, if necessary.
+private:
+	const string stateName;
+	string songName;
+	int timeLength;
+	string singerName;
+	int registration;
 
 public:
 
@@ -25,8 +33,19 @@ public:
 	// NO OTHER METHODS SHOULD APPEAR HERE.
 
 	// NO friend is allowed here.
+	Participant(string stateName, string songName, int timeLength, string singerName);
+	~Participant();
+	string state();
+	string song();
+	int timeLength();
+	string singer();
+	int isRegistered();
+	void update(string songName, int timeLength, string singerName);
+	void updateRegistered(bool registration);
 
 };
+
+ostream& operator<<(ostream& os, const Participant& participant);
 
 //---------------------------------------------------
 
