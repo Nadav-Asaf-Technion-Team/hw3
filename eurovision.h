@@ -99,16 +99,17 @@ private:
 	int maxTimeLength;
 	int maxParticipants;
 	int maxVotes;
-	//ContendersArray contenders; //should figure out where to define it
+	class Contender {};
+	class ContenderArray {};
+	ContenderArray contenders;
 
 public:
 
 	MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5);
-	~MainControl();
-	void setPhase(Phase phase);
+	~MainControl() = default;
+	void setPhase(Phase newPhase);
 	int legalParticipant(Participant participant);
 	int participate(string state);
-
 };
 
 // -----------------------------------------------------------

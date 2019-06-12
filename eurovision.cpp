@@ -89,3 +89,47 @@ Vote::Vote(const Voter& voter, const string to) :
 	voter(voter), to(to) {
 
 }
+
+MainControl::MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5) : 
+maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes) {
+	contenders = ContenderArray(maxParticipants);
+}
+
+void MainControl::setPhase(Phase newPhase) {
+	phase = newPhase;
+}
+
+int MainControl::legalParticipant(Participant participant) {
+	if (participant.song() == "" || participant.state() == "" || participant.singer = "")
+		return 0;
+	else if (participant.timeLength() > maxTimeLength)
+		return 0;
+	else return 1;
+}
+
+class MainControl::Contender {
+	Participant& participant;
+	int votesRecieved;
+
+	Contender(Participant& p, int votes) : participant(p), votesRecieved(votes) {};
+	~Contender() = default;
+	string getState() {
+		return participant.state();
+	};
+	int getVotes() {
+		return votesRecieved;
+	}
+	void addVotes(int newVotes) {
+		votesRecieved += newVotes;
+	}
+};
+
+class MainControl::ContenderArray {
+	Contender* data;
+	int size;
+	int effectiveSize; 
+
+	ContenderArray(int maxParticipants) : size(maxParticipants), effectiveSize(0) {
+		data = new Contender[maxParticipants];
+	}
+};
