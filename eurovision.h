@@ -105,8 +105,7 @@ private:
 		Participant* participant;
 		int regularVotes;
 		int judgeVotes;
-
-		Contender(Participant* p, int regularVotes, int judgeVotes);
+		Contender(Participant* p, int regularVotes = 0, int judgeVotes = 0);
 		Contender();
 		string getState();
 		int getRegularVotes();
@@ -115,8 +114,7 @@ private:
 		void addJudgeVotes(int newVotes);
 	};
 	Contender* contenders;
-	//class ContenderArray {};
-	//ContenderArray contenders;
+
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
@@ -129,9 +127,10 @@ public:
 	void setPhase(Phase newPhase);
 	int legalParticipant(Participant participant);
 	int participate(string state);
-
+	MainControl& operator+=(Participant& participant);
+	MainControl& operator+=(Vote& vote);
+	MainControl& operator-=(Participant& participant);
 	friend ostream& operator<<(ostream& os, const MainControl& eurovision);
-	friend ostream& operator<<(ostream& os, const MainControl::Contender& contender);
 };
 
 // -----------------------------------------------------------

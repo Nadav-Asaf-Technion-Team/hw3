@@ -90,10 +90,9 @@ Vote::Vote(const Voter& voter, const string to) :
 
 }
 
-MainControl::MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5) : 
-maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes), 
-contenders(new Contender[maxParticipants]) {
-	//ContenderArray contenders(maxParticipants);
+MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
+maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes), participantsAmount(0),
+phase(Registration),contenders(new Contender[maxParticipants]) {
 }
 
 MainControl::~MainControl() {
@@ -101,47 +100,89 @@ MainControl::~MainControl() {
 }
 
 void MainControl::setPhase(Phase newPhase) {
+	if (phase == Registration && newPhase == Voting) return;
+	if (phase == Contest && newPhase == Registration) return;
+	if (phase == Voting) return;
 	phase = newPhase;
 }
 
 int MainControl::legalParticipant(Participant participant) {
-	if (participant.song() == "" || participant.state() == "" || participant.singer = "")
+	if (participant.song() == "" || participant.state() == "" || participant.singer() == "")
 		return 0;
 	else if (participant.timeLength() > maxTimeLength)
 		return 0;
 	else return 1;
 }
 
+int MainControl::participate(string state){
+	for (int i = 0; i < participantsAmount; i++) {
+		if (contenders[i].participant == NULL) return 0;
+		if (state == (*(contenders[i].participant)).state()) {
+			return 1;
+		}
+	}
+	return 0;
+}
+MainControl& MainControl::operator+=(Participant& participant) {
+	if (phase != Registration) return *this;
+	if (participantsAmount == maxParticipants) return *this;
+	if (!legalParticipant(participant)) return *this;
+	if (participate(participant.state())) return *this;
+	contenders[participantsAmount++] = Contender(&participant);
+	return *this;
+}
+MainControl& MainControl::operator-=(Participant& participant) {
+	if (phase != Registration) return *this;
+	if (participantsAmount == 0) return *this;
+	if (!legalParticipant(participant)) return *this;
+	int flag = 0;
+	for (int i = 0; i < participantsAmount; i++) {
+		if (participant.state() == (*(contenders[i].participant)).state()) flag = 1;
+		if (flag == 1) {
+			contenders[i] = contenders[i+1];
+		}
+	}
+	if (flag) participantsAmount--;
+	return *this;
+}
+
+MainControl& MainControl::operator+=(Vote& vote) {
+
+}
+
 ostream& operator<<(ostream& os, const MainControl& eurovision) {
-	os << '{' << endl;
 	if (eurovision.phase == Registration) {
+		os << '{' << endl;
 		os << "Registration" << endl;
 		for (int i = 0; i < eurovision.participantsAmount; i++) {
-			os << eurovision.contenders[i].participant;
+			 os << *(eurovision.contenders[i].participant);
 		}
+		os << "}";
 	}
 	else if (eurovision.phase == Contest)
 		os << "Contest" << endl;
-	else
-		os << "Voting" << endl;	
+	else{
+		os << "Voting" << endl;
+		for(int i = 0; i < eurovision.participantsAmount; i++) {
+			 os << (*(eurovision.contenders[i].participant)).state() << ':' << "Regular("
+				<< eurovision.contenders[i].getRegularVotes() << ") Judge("
+				<< eurovision.contenders[i].getJudgeVotes() << ')' << endl;
+		}
+	}
+	return os;
+
 }
 
-//class MainControl::Contender {
-//public:
-//	Participant& participant;
-//	int regularVotes;
-//	int judgeVotes;
-//
+
 MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
 	participant(p), regularVotes(regularVotes),
 		judgeVotes(judgeVotes) {};
 
-MainControl::Contender::Contender() : regularVotes(0), judgeVotes(0) {
-
+MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
 };
 
 string MainControl::Contender::getState() {
-		return participant.state();
+		return (*participant).state();
 	};
 int MainControl::Contender::getRegularVotes() {
 		return regularVotes;
@@ -155,46 +196,3 @@ void MainControl::Contender::addRegularVotes(int newVotes) {
 void MainControl::Contender::addJudgeVotes(int newVotes) {
 		judgeVotes += newVotes;
 	}
-
-//};
-
-//class MainControl::ContenderArray {
-//	Contender* data;
-//	int size;
-//	int effectiveSize; 
-//
-//	ContenderArray(int maxParticipants) : size(maxParticipants), effectiveSize(0),
-//		data(new Contender[maxParticipants]) {}
-//
-//	~ContenderArray() {
-//		delete[] data;
-//	}
-//
-//	ContenderArray(const ContenderArray& old) : size(old.size), effectiveSize(old.effectiveSize) {
-//		for (int i = 0; i < size; i++) {
-//			data[i] = old.data[i];
-//		}
-//	}
-//
-//	ContenderArray& operator=(const ContenderArray& old) {
-//		if (this == &old) {
-//			return *this;
-//		}
-//		delete[] data;
-//		data = new Contender[old.size];
-//		size = old.size;
-//		effectiveSize = old.effectiveSize;
-//		for (int i = 0; i < size; i++) {
-//			data[i] = old.data[i];
-//		}
-//	}
-//
-//	Contender& operator[](int index) {
-//		return data[index];
-//	}
-//
-//	const Contender& operator[](int index) const {
-//		return data[index];
-//	}
-//
-//};
