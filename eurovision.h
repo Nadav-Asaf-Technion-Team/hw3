@@ -99,9 +99,24 @@ private:
 	int maxTimeLength;
 	int maxParticipants;
 	int maxVotes;
-	class Contender {};
-	class ContenderArray {};
-	ContenderArray contenders;
+	int participantsAmount;
+	class Contender {
+	public:
+		Participant* participant;
+		int regularVotes;
+		int judgeVotes;
+
+		Contender(Participant* p, int regularVotes, int judgeVotes);
+		Contender();
+		string getState();
+		int getRegularVotes();
+		int getJudgeVotes();
+		void addRegularVotes(int newVotes);
+		void addJudgeVotes(int newVotes);
+	};
+	Contender* contenders;
+	//class ContenderArray {};
+	//ContenderArray contenders;
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
@@ -110,12 +125,13 @@ public:
 
 	// Also it's allowed here to define friend.
 	MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5);
-	~MainControl() = default;
+	~MainControl();
 	void setPhase(Phase newPhase);
 	int legalParticipant(Participant participant);
 	int participate(string state);
 
 	friend ostream& operator<<(ostream& os, const MainControl& eurovision);
+	friend ostream& operator<<(ostream& os, const MainControl::Contender& contender);
 };
 
 // -----------------------------------------------------------

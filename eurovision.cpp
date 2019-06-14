@@ -91,8 +91,13 @@ Vote::Vote(const Voter& voter, const string to) :
 }
 
 MainControl::MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5) : 
-maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes) {
-	ContenderArray contenders(maxParticipants);
+maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes), 
+contenders(new Contender[maxParticipants]) {
+	//ContenderArray contenders(maxParticipants);
+}
+
+MainControl::~MainControl() {
+	delete[] contenders;
 }
 
 void MainControl::setPhase(Phase newPhase) {
@@ -109,69 +114,87 @@ int MainControl::legalParticipant(Participant participant) {
 
 ostream& operator<<(ostream& os, const MainControl& eurovision) {
 	os << '{' << endl;
-	if (eurovision.phase == Registration)
+	if (eurovision.phase == Registration) {
 		os << "Registration" << endl;
+		for (int i = 0; i < eurovision.participantsAmount; i++) {
+			os << eurovision.contenders[i].participant;
+		}
+	}
 	else if (eurovision.phase == Contest)
 		os << "Contest" << endl;
 	else
 		os << "Voting" << endl;	
 }
 
-class MainControl::Contender {
-	Participant& participant;
-	int votesRecieved;
+//class MainControl::Contender {
+//public:
+//	Participant& participant;
+//	int regularVotes;
+//	int judgeVotes;
+//
+MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
+	participant(p), regularVotes(regularVotes),
+		judgeVotes(judgeVotes) {};
 
-	Contender(Participant& p, int votes) : participant(p), votesRecieved(votes) {};
-	~Contender() = default;
-	string getState() {
+MainControl::Contender::Contender() : regularVotes(0), judgeVotes(0) {
+
+};
+
+string MainControl::Contender::getState() {
 		return participant.state();
 	};
-	int getVotes() {
-		return votesRecieved;
+int MainControl::Contender::getRegularVotes() {
+		return regularVotes;
 	}
-	void addVotes(int newVotes) {
-		votesRecieved += newVotes;
+int MainControl::Contender::getJudgeVotes() {
+		return regularVotes;
 	}
-};
-
-
-class MainControl::ContenderArray {
-	Contender* data;
-	int size;
-	int effectiveSize; 
-
-	ContenderArray(int maxParticipants) : size(maxParticipants), effectiveSize(0),
-		data(new Contender[maxParticipants]) {}
-
-	~ContenderArray() {
-		delete[] data;
+void MainControl::Contender::addRegularVotes(int newVotes) {
+		regularVotes += newVotes;
+	}
+void MainControl::Contender::addJudgeVotes(int newVotes) {
+		judgeVotes += newVotes;
 	}
 
-	ContenderArray(const ContenderArray& old) : size(old.size), effectiveSize(old.effectiveSize) {
-		for (int i = 0; i < size; i++) {
-			data[i] = old.data[i];
-		}
-	}
+//};
 
-	ContenderArray& operator=(const ContenderArray& old) {
-		if (this == &old) {
-			return *this;
-		}
-		delete[] data;
-		data = new Contender[old.size];
-		size = old.size;
-		effectiveSize = old.effectiveSize;
-		for (int i = 0; i < size; i++) {
-			data[i] = old.data[i];
-		}
-	}
-
-	Contender& operator[](int index) {
-		return data[index];
-	}
-
-	const Contender& operator[](int index) const {
-		return data[index];
-	}
-
-};
+//class MainControl::ContenderArray {
+//	Contender* data;
+//	int size;
+//	int effectiveSize; 
+//
+//	ContenderArray(int maxParticipants) : size(maxParticipants), effectiveSize(0),
+//		data(new Contender[maxParticipants]) {}
+//
+//	~ContenderArray() {
+//		delete[] data;
+//	}
+//
+//	ContenderArray(const ContenderArray& old) : size(old.size), effectiveSize(old.effectiveSize) {
+//		for (int i = 0; i < size; i++) {
+//			data[i] = old.data[i];
+//		}
+//	}
+//
+//	ContenderArray& operator=(const ContenderArray& old) {
+//		if (this == &old) {
+//			return *this;
+//		}
+//		delete[] data;
+//		data = new Contender[old.size];
+//		size = old.size;
+//		effectiveSize = old.effectiveSize;
+//		for (int i = 0; i < size; i++) {
+//			data[i] = old.data[i];
+//		}
+//	}
+//
+//	Contender& operator[](int index) {
+//		return data[index];
+//	}
+//
+//	const Contender& operator[](int index) const {
+//		return data[index];
+//	}
+//
+//};
