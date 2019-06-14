@@ -104,12 +104,18 @@ private:
 	ContenderArray contenders;
 
 public:
+	// need to define here possibly c'tr and d'tr and ONLY methods that
+	// are mentioned and demonstrated in the test example that has been published.
+	// NO OTHER METHODS SHOULD APPEAR HERE.
 
+	// Also it's allowed here to define friend.
 	MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5);
 	~MainControl() = default;
 	void setPhase(Phase newPhase);
 	int legalParticipant(Participant participant);
 	int participate(string state);
+
+	friend ostream& operator<<(ostream& os, const MainControl& eurovision);
 };
 
 // -----------------------------------------------------------

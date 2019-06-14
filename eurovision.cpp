@@ -92,7 +92,7 @@ Vote::Vote(const Voter& voter, const string to) :
 
 MainControl::MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5) : 
 maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes) {
-	contenders = ContenderArray(maxParticipants);
+	ContenderArray contenders(maxParticipants);
 }
 
 void MainControl::setPhase(Phase newPhase) {
@@ -105,6 +105,16 @@ int MainControl::legalParticipant(Participant participant) {
 	else if (participant.timeLength() > maxTimeLength)
 		return 0;
 	else return 1;
+}
+
+ostream& operator<<(ostream& os, const MainControl& eurovision) {
+	os << '{' << endl;
+	if (eurovision.phase == Registration)
+		os << "Registration" << endl;
+	else if (eurovision.phase == Contest)
+		os << "Contest" << endl;
+	else
+		os << "Voting" << endl;	
 }
 
 class MainControl::Contender {
@@ -124,12 +134,44 @@ class MainControl::Contender {
 	}
 };
 
+
 class MainControl::ContenderArray {
 	Contender* data;
 	int size;
 	int effectiveSize; 
 
-	ContenderArray(int maxParticipants) : size(maxParticipants), effectiveSize(0) {
-		data = new Contender[maxParticipants];
+	ContenderArray(int maxParticipants) : size(maxParticipants), effectiveSize(0),
+		data(new Contender[maxParticipants]) {}
+
+	~ContenderArray() {
+		delete[] data;
 	}
+
+	ContenderArray(const ContenderArray& old) : size(old.size), effectiveSize(old.effectiveSize) {
+		for (int i = 0; i < size; i++) {
+			data[i] = old.data[i];
+		}
+	}
+
+	ContenderArray& operator=(const ContenderArray& old) {
+		if (this == &old) {
+			return *this;
+		}
+		delete[] data;
+		data = new Contender[old.size];
+		size = old.size;
+		effectiveSize = old.effectiveSize;
+		for (int i = 0; i < size; i++) {
+			data[i] = old.data[i];
+		}
+	}
+
+	Contender& operator[](int index) {
+		return data[index];
+	}
+
+	const Contender& operator[](int index) const {
+		return data[index];
+	}
+
 };
