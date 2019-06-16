@@ -155,6 +155,7 @@ MainControl& MainControl::operator+=(Participant& participant) {
 	if (!legalParticipant(participant)) return *this;
 	if (participate(participant.state())) return *this;
 	contenders[participantsAmount++] = Contender(&participant);
+	BubbleSort(contenders, participantsAmount);
 	return *this;
 }
 MainControl& MainControl::operator-=(Participant& participant) {
@@ -189,7 +190,7 @@ MainControl& MainControl::operator+=(Vote& vote) {
 			int contenderIndex = findContender(vote.states[i]);
 			if (contenderIndex = -1) continue;
 			int points = 0;
-			switch (i){
+			switch (i) {
 			case 0: points = 12;
 			case 1: points = 10;
 			case 2: points = 8;
@@ -207,6 +208,26 @@ MainControl& MainControl::operator+=(Vote& vote) {
 		}
 	}
 	++(vote.voter);
+}
+
+
+void MainControl::Swap(Contender& a, Contender& b) {
+	Contender t(a);
+	a = b;
+	b = t;
+}
+
+void MainControl::BubbleSort(Contender* arr, int n) {
+	int swapped = 1, i = 1;
+	while (swapped) {
+		swapped = 0;
+		for (i = 1; i < n; i++) {
+			if (arr[i - 1].getState() > arr[i].getState()) {
+				Swap(arr[i], arr[i - 1]);
+				swapped = 1;
+			}
+		}
+	}
 }
 
 ostream& operator<<(ostream& os, const MainControl& eurovision) {

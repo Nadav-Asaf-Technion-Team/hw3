@@ -117,6 +117,9 @@ private:
 	};
 	Contender* contenders;
 	int findContender(string state);
+	static void Swap(Contender& a, Contender& b);
+	static void BubbleSort(Contender* arr, int n);
+
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
 	// are mentioned and demonstrated in the test example that has been published.
