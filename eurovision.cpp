@@ -85,9 +85,24 @@ ostream& operator<<(ostream& os, const Voter& voter) {
 	return os << '<' << voter.state() << '/' << type << '<';
 }
 
-Vote::Vote(const Voter& voter, const string to) :
-	voter(voter), to(to) {
 
+Vote::Vote(const Voter& voter, const string state0, const string state1 = "", const string state2 = "",
+	const string state3 = "", const string state4 = "", const string state5 = "", const string state6 = "",
+	const string state7 = "", const string state8 = "", const string state9 = ""):voter(voter) {
+	states[0] = state0; 
+	states[1] = state1;
+	states[2] = state2;
+	states[3] = state3;
+	states[4] = state4;
+	states[5] = state5;
+	states[6] = state6;
+	states[7] = state7;
+	states[8] = state8;
+	states[9] = state9;
+}
+
+Vote::~Vote(){
+	delete[] states;
 }
 
 MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
@@ -123,6 +138,17 @@ int MainControl::participate(string state){
 	}
 	return 0;
 }
+
+
+// finds the index of a given contender (by state) in the contenders array
+// if the contender given isnt in the array' returns -1;
+int MainControl::findContender(string state) {
+	if (state == "") return -1;
+	for (int i = 0; i < participantsAmount; i++) {
+		if (contenders[i].getState == state) return i;
+	}
+	return -1;
+}
 MainControl& MainControl::operator+=(Participant& participant) {
 	if (phase != Registration) return *this;
 	if (participantsAmount == maxParticipants) return *this;
@@ -147,7 +173,40 @@ MainControl& MainControl::operator-=(Participant& participant) {
 }
 
 MainControl& MainControl::operator+=(Vote& vote) {
-
+	if (phase != Registration) return *this;
+	if (!participate(vote.voter.state())) return *this;
+	if (vote.voter.voterType == Regular) {
+		if (vote.voter.state == vote.states[0]) return *this;
+		if (vote.voter.timesOfVotes >= maxVotes) return *this;
+		int contenderIndex = findContender(vote.states[0]);
+		if (contenderIndex = -1) return *this;
+		contenders[contenderIndex].addRegularVotes(1);
+	}
+	else { //Judge
+		if (vote.voter.timesOfVotes >= 1) return *this;
+		for (int i = 0; i < 10; i++) {
+			if (vote.states[i] == vote.voter.state()) continue;
+			int contenderIndex = findContender(vote.states[i]);
+			if (contenderIndex = -1) continue;
+			int points = 0;
+			switch (i){
+			case 0: points = 12;
+			case 1: points = 10;
+			case 2: points = 8;
+			case 3: points = 7;
+			case 4: points = 6;
+			case 5: points = 5;
+			case 6: points = 4;
+			case 7: points = 3;
+			case 8: points = 2;
+			case 9: points = 1;
+			default: 0;
+				break;
+			}
+			contenders[contenderIndex].addJudgeVotes(points);
+		}
+	}
+	++(vote.voter);
 }
 
 ostream& operator<<(ostream& os, const MainControl& eurovision) {

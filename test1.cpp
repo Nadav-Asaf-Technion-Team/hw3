@@ -308,7 +308,8 @@ int main()
 	first line - the phase name
 	other lines - all states are displayed sorted by state names, each state in a different line.
 	in each line we get
-	<state_name> : Regular(<num of points for regular votes>) Judge(<num of points for Judge votes>)
+	<state_name> : Regular(<num of points for regular votes>) 
+	(<num of points for Judge votes>)
 	*/
 
 	TEST("1.13")

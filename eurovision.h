@@ -78,14 +78,16 @@ ostream& operator<<(ostream& os, const Voter& voter);
 
 struct Vote
 {
-
+public:
 	// ALL is public here.
 	// need to define ONLY data members and c'tr and d'tr.
 	// NO NEED to define anything else.
 	Voter voter;
-	string to;
-	Vote(const Voter& voter, const string to);
-	~Vote() = default;
+	string* states = new string[10]; // dont forget destractor
+	Vote(const Voter& voter,const string state0, const string state1 = "", const string state2 = "",
+		const string state3 = "", const string state4 = "", const string state5 = "", const string state6 = "",
+		const string state7 = "", const string state8 = "", const string state9 = "");
+	~Vote();
 };
 
 // -----------------------------------------------------------
@@ -114,8 +116,7 @@ private:
 		void addJudgeVotes(int newVotes);
 	};
 	Contender* contenders;
-
-
+	int findContender(string state);
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
 	// are mentioned and demonstrated in the test example that has been published.
