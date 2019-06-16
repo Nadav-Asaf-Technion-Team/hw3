@@ -82,12 +82,12 @@ public:
 	// ALL is public here.
 	// need to define ONLY data members and c'tr and d'tr.
 	// NO NEED to define anything else.
-	Voter voter;
-	string* states = new string[10]; // dont forget destractor
-	Vote(const Voter& voter,const string state0, const string state1 = "", const string state2 = "",
+	Voter& voter;
+	string states[10];
+	Vote(Voter& voter,const string state0, const string state1 = "", const string state2 = "",
 		const string state3 = "", const string state4 = "", const string state5 = "", const string state6 = "",
 		const string state7 = "", const string state8 = "", const string state9 = "");
-	~Vote();
+	~Vote() = default;
 };
 
 // -----------------------------------------------------------
@@ -132,7 +132,7 @@ public:
 	int legalParticipant(Participant participant);
 	int participate(string state);
 	MainControl& operator+=(Participant& participant);
-	MainControl& operator+=(Vote& vote);
+	MainControl& operator+=(Vote vote);
 	MainControl& operator-=(Participant& participant);
 	friend ostream& operator<<(ostream& os, const MainControl& eurovision);
 };

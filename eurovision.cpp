@@ -29,7 +29,7 @@ string Participant::singer() const {
 }
 
 int Participant::isRegistered() const {
-	return Registration;
+	return registration;
 }
 
 void Participant::update(string songName, int songDuration, string singerName){
@@ -46,12 +46,12 @@ void Participant::update(string songName, int songDuration, string singerName){
 }
 
 void Participant::updateRegistered(bool registration) {
-	this->registration = Registration;
+	this->registration = registration;
 }
 
 ostream& operator<<(ostream& os, const Participant& participant) {
 	return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength() <<
-		'/' << participant.singer() << ']' << endl;
+		'/' << participant.singer() << ']';
 }
 
 Voter::Voter(string state, VoterType type) :
@@ -72,7 +72,7 @@ int Voter::timesOfVotes() const {
 }
 
 Voter& Voter::operator++() {
-	timesVoted++;
+	++timesVoted;
 	return *this;
 }
 
@@ -82,13 +82,13 @@ ostream& operator<<(ostream& os, const Voter& voter) {
 		type = "Regular";
 	else
 		type = "Judge";
-	return os << '<' << voter.state() << '/' << type << '<';
+	return os << '<' << voter.state() << '/' << type << '>';
 }
 
 
-Vote::Vote(const Voter& voter, const string state0, const string state1 = "", const string state2 = "",
-	const string state3 = "", const string state4 = "", const string state5 = "", const string state6 = "",
-	const string state7 = "", const string state8 = "", const string state9 = ""):voter(voter) {
+Vote::Vote(Voter& voter, const string state0, const string state1 , const string state2,
+	const string state3, const string state4, const string state5 , const string state6,
+	const string state7 , const string state8 , const string state9): voter(voter) {
 	states[0] = state0; 
 	states[1] = state1;
 	states[2] = state2;
@@ -101,9 +101,6 @@ Vote::Vote(const Voter& voter, const string state0, const string state1 = "", co
 	states[9] = state9;
 }
 
-Vote::~Vote(){
-	delete[] states;
-}
 
 MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
 maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes), participantsAmount(0),
@@ -145,7 +142,7 @@ int MainControl::participate(string state){
 int MainControl::findContender(string state) {
 	if (state == "") return -1;
 	for (int i = 0; i < participantsAmount; i++) {
-		if (contenders[i].getState == state) return i;
+		if (contenders[i].getState() == state) return i;
 	}
 	return -1;
 }
@@ -156,6 +153,7 @@ MainControl& MainControl::operator+=(Participant& participant) {
 	if (participate(participant.state())) return *this;
 	contenders[participantsAmount++] = Contender(&participant);
 	BubbleSort(contenders, participantsAmount);
+	participant.updateRegistered(1);
 	return *this;
 }
 MainControl& MainControl::operator-=(Participant& participant) {
@@ -169,26 +167,30 @@ MainControl& MainControl::operator-=(Participant& participant) {
 			contenders[i] = contenders[i+1];
 		}
 	}
-	if (flag) participantsAmount--;
+	if (flag) {
+		participantsAmount--;
+		participant.updateRegistered(0);
+	}
+
 	return *this;
 }
 
-MainControl& MainControl::operator+=(Vote& vote) {
-	if (phase != Registration) return *this;
+MainControl& MainControl::operator+=(Vote vote) {
+	if (phase != Voting) return *this;
 	if (!participate(vote.voter.state())) return *this;
-	if (vote.voter.voterType == Regular) {
-		if (vote.voter.state == vote.states[0]) return *this;
-		if (vote.voter.timesOfVotes >= maxVotes) return *this;
+	if (vote.voter.voterType() == Regular) {
+		if (vote.voter.state() == vote.states[0]) return *this;
+		if (vote.voter.timesOfVotes() >= maxVotes) return *this;
 		int contenderIndex = findContender(vote.states[0]);
-		if (contenderIndex = -1) return *this;
+		if (contenderIndex == -1) return *this;
 		contenders[contenderIndex].addRegularVotes(1);
 	}
 	else { //Judge
-		if (vote.voter.timesOfVotes >= 1) return *this;
+		if (vote.voter.timesOfVotes() >= 1) return *this;
 		for (int i = 0; i < 10; i++) {
 			if (vote.states[i] == vote.voter.state()) continue;
 			int contenderIndex = findContender(vote.states[i]);
-			if (contenderIndex = -1) continue;
+			if (contenderIndex == -1) continue;
 			int points = 0;
 			switch (i) {
 			case 0: points = 12;
@@ -207,7 +209,8 @@ MainControl& MainControl::operator+=(Vote& vote) {
 			contenders[contenderIndex].addJudgeVotes(points);
 		}
 	}
-	++(vote.voter);
+	++vote.voter;
+	return *this;
 }
 
 
@@ -231,24 +234,24 @@ void MainControl::BubbleSort(Contender* arr, int n) {
 }
 
 ostream& operator<<(ostream& os, const MainControl& eurovision) {
+	os << '{' << endl;
 	if (eurovision.phase == Registration) {
-		os << '{' << endl;
 		os << "Registration" << endl;
 		for (int i = 0; i < eurovision.participantsAmount; i++) {
-			 os << *(eurovision.contenders[i].participant);
+			 os << *(eurovision.contenders[i].participant) << endl;
 		}
-		os << "}";
 	}
 	else if (eurovision.phase == Contest)
 		os << "Contest" << endl;
 	else{
 		os << "Voting" << endl;
 		for(int i = 0; i < eurovision.participantsAmount; i++) {
-			 os << (*(eurovision.contenders[i].participant)).state() << ':' << "Regular("
+			 os << (*(eurovision.contenders[i].participant)).state() << " : " << "Regular("
 				<< eurovision.contenders[i].getRegularVotes() << ") Judge("
 				<< eurovision.contenders[i].getJudgeVotes() << ')' << endl;
 		}
 	}
+	os << "}" << endl;
 	return os;
 
 }
@@ -268,7 +271,7 @@ int MainControl::Contender::getRegularVotes() {
 		return regularVotes;
 	}
 int MainControl::Contender::getJudgeVotes() {
-		return regularVotes;
+		return judgeVotes;
 	}
 void MainControl::Contender::addRegularVotes(int newVotes) {
 		regularVotes += newVotes;
