@@ -114,7 +114,8 @@ private:
 		void addJudgeVotes(int newVotes);
 	};
 	Contender* contenders;
-
+	static void Swap(Contender& a, Contender& b);
+	static void BubbleSort(Contender* arr, int n);
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
