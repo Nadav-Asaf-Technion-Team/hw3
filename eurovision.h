@@ -53,7 +53,7 @@ ostream& operator<<(ostream& os, const Participant& participant);
 class Voter
 {
 	// relevant private members can be defined here, if necessary.
-	const VoterType type;
+	VoterType type;
 	const string voterState;
 	int timesVoted;
 

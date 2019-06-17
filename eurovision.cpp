@@ -54,9 +54,8 @@ ostream& operator<<(ostream& os, const Participant& participant) {
 		'/' << participant.singer() << ']';
 }
 
-Voter::Voter(string state, VoterType type) :
-	voterState(state), type(type), timesVoted(0) {
-
+Voter::Voter(string state, VoterType type) : 
+	type(type), voterState(state), timesVoted(0){
 }
 
 string Voter::state() const {
@@ -103,8 +102,8 @@ Vote::Vote(Voter& voter, const string state0, const string state1 , const string
 
 
 MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
-maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes), participantsAmount(0),
-phase(Registration),contenders(new Contender[maxParticipants]) {
+	phase(Registration), maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes),
+	participantsAmount(0) ,contenders(new Contender[maxParticipants]) {
 }
 
 MainControl::~MainControl() {
@@ -213,8 +212,6 @@ MainControl& MainControl::operator+=(Vote vote) {
 				break;
 			case 9: points = 1;
 				break;
-			default: 0;
-				break;
 			}
 			contenders[contenderIndex].addJudgeVotes(points);
 		}
@@ -269,14 +266,14 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 
 MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
 	participant(p), regularVotes(regularVotes),
-		judgeVotes(judgeVotes) {};
+		judgeVotes(judgeVotes) {}
 
 MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
-};
+}
 
 string MainControl::Contender::getState() {
 		return (*participant).state();
-	};
+	}
 int MainControl::Contender::getRegularVotes() {
 		return regularVotes;
 	}
