@@ -100,7 +100,6 @@ Vote::Vote(Voter& voter, const string state0, const string state1 , const string
 	states[9] = state9;
 }
 
-
 MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
 	phase(Registration), maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes),
 	participantsAmount(0) ,contenders(new Contender[maxParticipants]) {
@@ -286,3 +285,34 @@ void MainControl::Contender::addRegularVotes(int newVotes) {
 void MainControl::Contender::addJudgeVotes(int newVotes) {
 		judgeVotes += newVotes;
 	}
+
+MainControl::Iterator::Iterator() : eurovision(NULL), index(0) {}
+
+MainControl::Iterator MainControl::begin() const {
+	return Iterator(this, 0);
+}
+
+MainControl::Iterator MainControl::end() const {
+	return Iterator(this, participantsAmount);
+}
+
+MainControl::Iterator::Iterator(const MainControl* eurovision, int index) : 
+	eurovision(eurovision), index(index) {}
+
+bool MainControl::Iterator::operator<(const MainControl::Iterator& it) const {
+	return (index < it.index);
+}
+
+const Participant& MainControl::Iterator::operator*() const {
+	return *(eurovision->contenders[index].participant);
+}
+
+MainControl::Iterator& MainControl::Iterator::operator++() {
+	++index;
+	return *this;
+}
+
+bool MainControl::Iterator::operator==(const MainControl::Iterator& it) const {
+	return (index == it.index);
+}
+

@@ -115,6 +115,7 @@ private:
 		void addRegularVotes(int newVotes);
 		void addJudgeVotes(int newVotes);
 	};
+
 	Contender* contenders;
 	int findContender(string state);
 	static void Swap(Contender& a, Contender& b);
@@ -135,8 +136,25 @@ public:
 	MainControl& operator+=(Vote vote);
 	MainControl& operator-=(Participant& participant);
 	friend ostream& operator<<(ostream& os, const MainControl& eurovision);
+	class Iterator;
+	Iterator begin() const;
+	Iterator end() const;
 };
 
+class MainControl::Iterator {
+	const MainControl* eurovision;
+	int index;
+	Iterator(const MainControl* eurovision, int index);
+	friend class MainControl;
+public:
+	Iterator();
+	const Participant& operator*() const;
+	bool operator<(const Iterator& it) const;
+	Iterator& operator++();
+	bool operator==(const Iterator& it) const;
+	Iterator(const Iterator& it) = default;
+	Iterator& operator=(const Iterator& it) = default;
+};
 // -----------------------------------------------------------
 
 #endif
