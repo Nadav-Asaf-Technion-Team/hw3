@@ -129,8 +129,8 @@ private:
 	static void BubbleSort(Contender* arr, int n);
 	//Iterator for iterator's type, T for the type of objects in the container, Max for the functor 
 	//that will compare objects
-	template<class Iterator, class T, class Max>
-	T& get(Iterator begin, Iterator end, Max max, int i);
+	template<class It, class T, class Max>
+	//T& get(It begin, It end, Max max, int i);
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that

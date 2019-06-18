@@ -1,9 +1,10 @@
 #include <iostream>
-
+#include <stack>
 #include "eurovision.h"
 
 using std::cout;
 using std::endl;
+using std::stack;
 
 Participant::Participant(string stateName, string songName, int songDuration, string singerName) :
 	stateName(stateName),
@@ -347,3 +348,15 @@ bool MainControl::Contender::Max::operator()(const Contender& c1, const Contende
 		else return (sum1 > sum2);
 	}
 }
+
+//template<class It, class T, class Max>
+//T& MainControl::get(It begin, It end, Max max, int i) {
+//	stack<T> stack(i);
+//	It maxValue = begin;
+//	for (int j = 0; j < i; j++) {
+//
+//		for (It it = begin; it < end; ++it) {
+//			                       
+//		}
+//	}
+//}
