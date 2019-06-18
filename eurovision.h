@@ -114,6 +114,7 @@ private:
 		int getJudgeVotes() const;
 		void addRegularVotes(int newVotes);
 		void addJudgeVotes(int newVotes);
+		bool operator==(const Contender& c) const;
 		//Functor, returns true if left hand argument is greater
 		class Max {
 			VoterType type;
@@ -129,8 +130,8 @@ private:
 	static void BubbleSort(Contender* arr, int n);
 	//Iterator for iterator's type, T for the type of objects in the container, Max for the functor 
 	//that will compare objects
-	template<class Iterator, class T, class Max>
-	T& get(Iterator begin, Iterator end, Max max, int i);
+	template<class Iter, class T, class Max>
+	Iter get(Iter begin, Iter end, Max max, int i);
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that

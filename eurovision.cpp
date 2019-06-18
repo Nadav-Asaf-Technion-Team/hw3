@@ -1,9 +1,13 @@
 #include <iostream>
-
+#include<algorithm>
+#include<vector>
 #include "eurovision.h"
 
 using std::cout;
 using std::endl;
+using std::sort;
+using std::vector;
+
 
 Participant::Participant(string stateName, string songName, int songDuration, string singerName) :
 	stateName(stateName),
@@ -285,6 +289,9 @@ void MainControl::Contender::addRegularVotes(int newVotes) {
 void MainControl::Contender::addJudgeVotes(int newVotes) {
 		judgeVotes += newVotes;
 	}
+bool MainControl::Contender::operator==(const Contender& c) const {
+	return (participant == c.participant);
+}
 
 MainControl::Iterator::Iterator() : eurovision(NULL), index(0) {}
 
@@ -318,8 +325,14 @@ bool MainControl::Iterator::operator==(const MainControl::Iterator& it) const {
 
 string MainControl::operator()(int i, VoterType type) {
 	Contender::Max max(type);
-		Contender& contender = get<Iterator, Contender, Contender::Max>(begin(), end(), max, i);
-		return contender.getState();
+	vector<Contender> vector;
+	for (int i = 0; i < participantsAmount; i++) {
+		vector.push_back(contenders[i]);
+	}
+	std::vector<Contender>::iterator iter = get<std::vector<Contender>::iterator, Contender, Contender::Max>
+		(vector.begin(),vector.end(), max, i);
+	if (iter == vector.end()) return "";
+	return (*iter).getState();
 }
 
 MainControl::Contender::Max::Max(VoterType type) : type(type) {
@@ -328,13 +341,13 @@ MainControl::Contender::Max::Max(VoterType type) : type(type) {
 bool MainControl::Contender::Max::operator()(const Contender& c1, const Contender& c2) {
 	if (type == Regular) {
 		if (c1.getRegularVotes() == c2.getRegularVotes()) {
-			return (c1.getState() > c2.getState); // if equal score, compare by state name
+			return (c1.getState() > c2.getState()); // if equal score, compare by state name
 		}
 		else return (c1.getRegularVotes() > c2.getRegularVotes());
 	}
 	else if (type == Judge) {
 		if (c1.getJudgeVotes() == c2.getJudgeVotes()) {
-			return (c1.getState() > c2.getState);
+			return (c1.getState() > c2.getState());
 		}
 		else return (c1.getJudgeVotes() > c2.getJudgeVotes());
 	}
@@ -342,8 +355,23 @@ bool MainControl::Contender::Max::operator()(const Contender& c1, const Contende
 		int sum1 = c1.getJudgeVotes() + c1.getRegularVotes();
 		int sum2 = c2.getJudgeVotes() + c2.getRegularVotes();
 		if (sum1 == sum2) {
-			return (c1.getState() > c2.getState);
+			return (c1.getState() > c2.getState());
 		}
 		else return (sum1 > sum2);
 	}
+}
+
+template<class Iter, class T, class Max>
+Iter MainControl::get(Iter begin, Iter end, Max max, int i) {
+	if (i <= 0) return end;
+	vector<T> newVector;
+	for (Iter it = begin; it < end; ++it) {
+		newVector.push_back(*it);
+	}
+	if (newVector.size() < i) return end;
+	sort(newVector.begin(), newVector.end(), max);
+	for (Iter res = begin; res < end; ++res) {
+		if (*res == newVector[i - 1]) return res;
+	}
+	return end;
 }

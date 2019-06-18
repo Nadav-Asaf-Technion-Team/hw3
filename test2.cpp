@@ -364,29 +364,29 @@ TEST("1.17")
   /* example of voting of a Judge */
   cout << eurovision << endl;
 
-//TEST("1.17.1")
-//
-//  cout << eurovision(1, Regular) << endl;
-//  cout << eurovision(2, Regular) << endl;
-//  cout << eurovision(3, Regular) << endl;
-//  cout << eurovision(4, Regular) << endl;
-//  cout << eurovision(5, Regular) << endl;
-//
-//TEST("1.17.2")
-//
-//  cout << eurovision(1, Judge) << endl;
-//  cout << eurovision(2, Judge) << endl;
-//  cout << eurovision(3, Judge) << endl;
-//  cout << eurovision(4, Judge) << endl;
-//  cout << eurovision(5, Judge) << endl;
-//
-//TEST("1.17.3")
-//
-//  cout << eurovision(1, All) << endl;
-//  cout << eurovision(2, All) << endl;
-//  cout << eurovision(3, All) << endl;
-//  cout << eurovision(4, All) << endl;
-//  cout << eurovision(5, All) << endl;
+TEST("1.17.1")
+
+  cout << eurovision(1, Regular) << endl;
+  cout << eurovision(2, Regular) << endl;
+  cout << eurovision(3, Regular) << endl;
+  cout << eurovision(4, Regular) << endl;
+  cout << eurovision(5, Regular) << endl;
+
+TEST("1.17.2")
+
+  cout << eurovision(1, Judge) << endl;
+  cout << eurovision(2, Judge) << endl;
+  cout << eurovision(3, Judge) << endl;
+  cout << eurovision(4, Judge) << endl;
+  cout << eurovision(5, Judge) << endl;
+
+TEST("1.17.3")
+
+  cout << eurovision(1, All) << endl;
+  cout << eurovision(2, All) << endl;
+  cout << eurovision(3, All) << endl;
+  cout << eurovision(4, All) << endl;
+  cout << eurovision(5, All) << endl;
 
   return 0;
 }
