@@ -109,17 +109,28 @@ private:
 		int judgeVotes;
 		Contender(Participant* p, int regularVotes = 0, int judgeVotes = 0);
 		Contender();
-		string getState();
-		int getRegularVotes();
-		int getJudgeVotes();
+		string getState() const;
+		int getRegularVotes() const;
+		int getJudgeVotes() const;
 		void addRegularVotes(int newVotes);
 		void addJudgeVotes(int newVotes);
+		//Functor, returns true if left hand argument is greater
+		class Max {
+			VoterType type;
+		public:
+			Max(VoterType type);
+			~Max() = default;
+			bool operator()(const Contender& c1, const Contender& c2);
+		};
 	};
-
 	Contender* contenders;
 	int findContender(string state);
 	static void Swap(Contender& a, Contender& b);
 	static void BubbleSort(Contender* arr, int n);
+	//Iterator for iterator's type, T for the type of objects in the container, Max for the functor 
+	//that will compare objects
+	template<class Iterator, class T, class Max>
+	T& get(Iterator begin, Iterator end, Max max, int i);
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
@@ -139,6 +150,7 @@ public:
 	class Iterator;
 	Iterator begin() const;
 	Iterator end() const;
+	string operator()(int i, VoterType type);
 };
 
 class MainControl::Iterator {

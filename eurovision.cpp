@@ -270,13 +270,13 @@ MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVot
 MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
 }
 
-string MainControl::Contender::getState() {
+string MainControl::Contender::getState() const{
 		return (*participant).state();
 	}
-int MainControl::Contender::getRegularVotes() {
+int MainControl::Contender::getRegularVotes() const {
 		return regularVotes;
 	}
-int MainControl::Contender::getJudgeVotes() {
+int MainControl::Contender::getJudgeVotes() const {
 		return judgeVotes;
 	}
 void MainControl::Contender::addRegularVotes(int newVotes) {
@@ -316,3 +316,34 @@ bool MainControl::Iterator::operator==(const MainControl::Iterator& it) const {
 	return (index == it.index);
 }
 
+string MainControl::operator()(int i, VoterType type) {
+	Contender::Max max(type);
+		Contender& contender = get<Iterator, Contender, Contender::Max>(begin(), end(), max, i);
+		return contender.getState();
+}
+
+MainControl::Contender::Max::Max(VoterType type) : type(type) {
+}
+
+bool MainControl::Contender::Max::operator()(const Contender& c1, const Contender& c2) {
+	if (type == Regular) {
+		if (c1.getRegularVotes() == c2.getRegularVotes()) {
+			return (c1.getState() > c2.getState); // if equal score, compare by state name
+		}
+		else return (c1.getRegularVotes() > c2.getRegularVotes());
+	}
+	else if (type == Judge) {
+		if (c1.getJudgeVotes() == c2.getJudgeVotes()) {
+			return (c1.getState() > c2.getState);
+		}
+		else return (c1.getJudgeVotes() > c2.getJudgeVotes());
+	}
+	else {
+		int sum1 = c1.getJudgeVotes() + c1.getRegularVotes();
+		int sum2 = c2.getJudgeVotes() + c2.getRegularVotes();
+		if (sum1 == sum2) {
+			return (c1.getState() > c2.getState);
+		}
+		else return (sum1 > sum2);
+	}
+}
