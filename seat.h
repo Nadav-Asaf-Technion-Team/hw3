@@ -5,10 +5,10 @@ using std::exception;
 
 
 // ---------------------------------------------
-class NoPrice : exception
+class NoPrice : public exception
 {
 public:
-	const char* what() const override; //to implement
+	const char* what() const override;
 };
 
 // ---------------------------------------------
@@ -29,9 +29,9 @@ public:
 // ---------------------------------------------
 class GreenRoomSeat : public Seat
 {
+public:
 	GreenRoomSeat(int line, int chair);
 	~GreenRoomSeat() {};
-public:
 	int price() override;//throws exception
 	string location() override;
 };
@@ -67,7 +67,8 @@ public:
 class DisablePodiumSeat : public SpecialSeat
 {
 public:
-	DisablePodiumSeat(int line, int chair, int base); // total = 200
+	DisablePodiumSeat(int line, int chair); // total = 200
+	DisablePodiumSeat(int line, int chair, int base);
 	~DisablePodiumSeat() {};
 	string location() override;
 };
@@ -78,7 +79,7 @@ class RegularSeat : public MainHallSeat //abstract
 protected:
 	char area;
 public:
-	RegularSeat(int line, int chair, int base);
+	RegularSeat(char area, int line, int chair, int base);
 	~RegularSeat() {};
 	virtual string location() = 0; //to implement
 };
@@ -86,7 +87,8 @@ public:
 // ---------------------------------------------
 class FrontRegularSeat : public RegularSeat
 {
-	FrontRegularSeat(int line, int chair, int base); //+500 to total
+public: 
+	FrontRegularSeat(char area, int line, int chair, int base); //+500 to total
 	~FrontRegularSeat() {};
 	string location() override;
 };
@@ -94,7 +96,8 @@ class FrontRegularSeat : public RegularSeat
 // ---------------------------------------------
 class MiddleRegularSeat : public  RegularSeat
 {
-	MiddleRegularSeat(int line, int chair, int base); //+250 to total
+public:
+	MiddleRegularSeat(char area, int line, int chair, int base); //+250 to total
 	~MiddleRegularSeat() {};
 	string location() override;
 
@@ -103,7 +106,8 @@ class MiddleRegularSeat : public  RegularSeat
 // ---------------------------------------------
 class RearRegularSeat : public RegularSeat
 {
-	RearRegularSeat(int line, int chair, int base); //+0 to total
+public:
+	RearRegularSeat(char area, int line, int chair, int base); //+0 to total
 	~RearRegularSeat() {};
 	string location() override;
 };
