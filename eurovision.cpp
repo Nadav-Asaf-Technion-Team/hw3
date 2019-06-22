@@ -164,7 +164,8 @@ MainControl& MainControl::operator-=(Participant& participant) {
 	if (!legalParticipant(participant)) return *this;
 	int flag = 0;
 	for (int i = 0; i < participantsAmount; i++) {
-		if (participant.state() == (*(contenders[i].participant)).state()) flag = 1;
+		//if (participant.state() == (*(contenders[i].participant)).state()) flag = 1;
+		if (&participant == contenders[i].participant) flag = 1;
 		if (flag == 1) {
 			contenders[i] = contenders[i+1];
 		}
