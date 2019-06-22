@@ -8,7 +8,7 @@ using std::exception;
 class NoPrice : public exception
 {
 public:
-	const char* what() const override;
+	const char* what() const noexcept override;
 };
 
 // ---------------------------------------------

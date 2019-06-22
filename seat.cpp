@@ -1,6 +1,6 @@
 #include "seat.h"
 
-const char* NoPrice::what() const {
+const char* NoPrice::what() const noexcept {
 	return "Not For Sale !";
 }
 

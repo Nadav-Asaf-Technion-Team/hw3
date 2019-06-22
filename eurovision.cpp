@@ -179,6 +179,7 @@ MainControl& MainControl::operator-=(Participant& participant) {
 
 MainControl& MainControl::operator+=(Vote vote) {
 	if (phase != Voting) return *this;
+	bool flag = false;
 	if (!participate(vote.voter.state())) return *this;
 	if (vote.voter.voterType() == Regular) {
 		if (vote.voter.state() == vote.states[0]) return *this;
@@ -186,6 +187,7 @@ MainControl& MainControl::operator+=(Vote vote) {
 		int contenderIndex = findContender(vote.states[0]);
 		if (contenderIndex == -1) return *this;
 		contenders[contenderIndex].addRegularVotes(1);
+		flag = true;
 	}
 	else { //Judge
 		if (vote.voter.timesOfVotes() >= 1) return *this;
@@ -193,6 +195,7 @@ MainControl& MainControl::operator+=(Vote vote) {
 			if (vote.states[i] == vote.voter.state()) continue;
 			int contenderIndex = findContender(vote.states[i]);
 			if (contenderIndex == -1) continue;
+			flag = true;
 			int points = 0;
 			switch (i) {
 			case 0: points = 12;
@@ -219,7 +222,7 @@ MainControl& MainControl::operator+=(Vote vote) {
 			contenders[contenderIndex].addJudgeVotes(points);
 		}
 	}
-	++vote.voter;
+	if (flag == true) ++vote.voter;
 	return *this;
 }
 
