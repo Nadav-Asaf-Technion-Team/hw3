@@ -5,7 +5,8 @@
 using std::cout;
 using std::endl;
 
-Participant::Participant(string stateName, string songName, int songDuration, string singerName) :
+Participant::Participant(string stateName, string songName, int songDuration,
+	string singerName) :
 	stateName(stateName),
 	songName(songName),
 	songDuration(songDuration),
@@ -50,8 +51,9 @@ void Participant::updateRegistered(bool registration) {
 }
 
 ostream& operator<<(ostream& os, const Participant& participant) {
-	return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength() <<
-		'/' << participant.singer() << ']';
+	return os << '[' << participant.state() << '/' << participant.song()
+		<< '/' << participant.timeLength() << '/' << participant.singer() 
+		<< ']';
 }
 
 Voter::Voter(string state, VoterType type) :
@@ -86,9 +88,10 @@ ostream& operator<<(ostream& os, const Voter& voter) {
 }
 
 
-Vote::Vote(Voter& voter, const string state0, const string state1 , const string state2,
-	const string state3, const string state4, const string state5 , const string state6,
-	const string state7 , const string state8 , const string state9): voter(voter) {
+Vote::Vote(Voter& voter, const string state0, const string state1,
+	const string state2, const string state3, const string state4,
+	const string state5 , const string state6, const string state7,
+	const string state8 , const string state9): voter(voter) {
 	states[0] = state0; 
 	states[1] = state1;
 	states[2] = state2;
@@ -102,9 +105,10 @@ Vote::Vote(Voter& voter, const string state0, const string state1 , const string
 }
 
 
-MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
-maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes), participantsAmount(0),
-phase(Registration),contenders(new Contender[maxParticipants]) {
+MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes): 
+maxTimeLength(maxTimeLength), maxParticipants(maxParticipants),
+maxVotes(maxVotes), participantsAmount(0), phase(Registration),
+contenders(new Contender[maxParticipants]) {
 }
 
 MainControl::~MainControl() {
@@ -119,8 +123,10 @@ void MainControl::setPhase(Phase newPhase) {
 }
 
 int MainControl::legalParticipant(Participant participant) {
-	if (participant.song() == "" || participant.state() == "" || participant.singer() == "")
+	if (participant.song() == "" || participant.state() == ""
+		|| participant.singer() == "") {
 		return 0;
+	}
 	else if (participant.timeLength() > maxTimeLength)
 		return 0;
 	else return 1;
@@ -162,7 +168,9 @@ MainControl& MainControl::operator-=(Participant& participant) {
 	if (!legalParticipant(participant)) return *this;
 	int flag = 0;
 	for (int i = 0; i < participantsAmount; i++) {
-		if (participant.state() == (*(contenders[i].participant)).state()) flag = 1;
+		if (participant.state() == (*(contenders[i].participant)).state()) {
+			flag = 1;
+		}
 		if (flag == 1) {
 			contenders[i] = contenders[i+1];
 		}
@@ -256,9 +264,10 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 	else{
 		os << "Voting" << endl;
 		for(int i = 0; i < eurovision.participantsAmount; i++) {
-			 os << (*(eurovision.contenders[i].participant)).state() << " : " << "Regular("
-				<< eurovision.contenders[i].getRegularVotes() << ") Judge("
-				<< eurovision.contenders[i].getJudgeVotes() << ')' << endl;
+			 os << (*(eurovision.contenders[i].participant)).state() << " : "
+				<< "Regular(" << eurovision.contenders[i].getRegularVotes() 
+				<< ") Judge(" << eurovision.contenders[i].getJudgeVotes()
+				<< ')' << endl;
 		}
 	}
 	os << "}" << endl;
@@ -267,11 +276,12 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 }
 
 
-MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
-	participant(p), regularVotes(regularVotes),
-		judgeVotes(judgeVotes) {};
+MainControl::Contender::Contender(Participant* p, int regularVotes,
+	int judgeVotes) :  participant(p), regularVotes(regularVotes),
+					   judgeVotes(judgeVotes) {};
 
-MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
+MainControl::Contender::Contender() :participant(NULL), regularVotes(0),
+	judgeVotes(0) {
 };
 
 string MainControl::Contender::getState() {

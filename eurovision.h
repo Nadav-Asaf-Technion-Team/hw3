@@ -84,9 +84,11 @@ public:
 	// NO NEED to define anything else.
 	Voter& voter;
 	string states[10];
-	Vote(Voter& voter,const string state0, const string state1 = "", const string state2 = "",
-		const string state3 = "", const string state4 = "", const string state5 = "", const string state6 = "",
-		const string state7 = "", const string state8 = "", const string state9 = "");
+	Vote(Voter& voter,const string state0, const string state1 = "",
+		const string state2 = "", const string state3 = "",
+		const string state4 = "", const string state5 = "",
+		const string state6 = "",const string state7 = "", 
+		const string state8 = "", const string state9 = "");
 	~Vote() = default;
 };
 
@@ -126,7 +128,8 @@ public:
 	// NO OTHER METHODS SHOULD APPEAR HERE.
 
 	// Also it's allowed here to define friend.
-	MainControl(int maxTimeLength = 180, int maxParticipants = 26, int maxVotes = 5);
+	MainControl(int maxTimeLength = 180, int maxParticipants = 26,
+		int maxVotes = 5);
 	~MainControl();
 	void setPhase(Phase newPhase);
 	int legalParticipant(Participant participant);
