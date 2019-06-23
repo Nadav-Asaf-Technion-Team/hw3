@@ -182,6 +182,8 @@ MainControl& MainControl::operator-=(Participant& participant) {
 	return *this;
 }
 
+//Function that gives points according to the location of a state
+//in the array of judge votes.
 static int givePoints(int i) {
 	int points = 0;
 	switch (i) {
@@ -209,6 +211,7 @@ static int givePoints(int i) {
 	return points;
 }
 
+//adds votes to participants (both regular and judge)
 MainControl& MainControl::operator+=(Vote vote) {
 	if (phase != Voting) return *this;
 	bool flag = false;
@@ -236,13 +239,15 @@ MainControl& MainControl::operator+=(Vote vote) {
 	return *this;
 }
 
-
+//swaps 2 contenders in MainControl's contenders array
+//(used for sorting the array)
 void MainControl::Swap(Contender& a, Contender& b) {
 	Contender t(a);
 	a = b;
 	b = t;
 }
 
+//sorts contenders array by name
 void MainControl::BubbleSort(Contender* arr, int n) {
 	int swapped = 1, i = 1;
 	while (swapped) {
@@ -256,6 +261,8 @@ void MainControl::BubbleSort(Contender* arr, int n) {
 	}
 }
 
+//prints MainControl object.
+//divided to cases according to the current phase. 
 ostream& operator<<(ostream& os, const MainControl& eurovision) {
 	os << '{' << endl;
 	if (eurovision.phase == Registration) {
@@ -280,7 +287,6 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 
 }
 
-
 MainControl::Contender::Contender(Participant* p, int regularVotes,
 	int judgeVotes) : 
 	participant(p), regularVotes(regularVotes),
@@ -290,31 +296,46 @@ MainControl::Contender::Contender() :participant(NULL), regularVotes(0),
 	judgeVotes(0) {
 }
 
+//returns the state name of the participant linked to a contender
 string MainControl::Contender::getState() const{
 		return (*participant).state();
 	}
+
+//returns the votes from regular voters given to a participant linked 
+//to the contender
 int MainControl::Contender::getRegularVotes() const {
 		return regularVotes;
 	}
+
+//returns the votes from judges given to a participant linked 
+//to the contender
 int MainControl::Contender::getJudgeVotes() const {
 		return judgeVotes;
 	}
+
+//adds regular voters' votes to the contender
 void MainControl::Contender::addRegularVotes(int newVotes) {
 		regularVotes += newVotes;
 	}
+
+//adds judges' votes to the contender
 void MainControl::Contender::addJudgeVotes(int newVotes) {
 		judgeVotes += newVotes;
 	}
+
+//checks if two contenders point to a state with the same name. 
 bool MainControl::Contender::operator==(const Contender& c) const {
 	return (participant == c.participant);
 }
 
 MainControl::Iterator::Iterator() : eurovision(NULL), index(0) {}
 
+//returns iterator to the beginning of the contenders array
 MainControl::Iterator MainControl::begin() const {
 	return Iterator(this, 0);
 }
 
+//returns iterator to the end of the contenders array
 MainControl::Iterator MainControl::end() const {
 	return Iterator(this, participantsAmount);
 }
@@ -322,23 +343,29 @@ MainControl::Iterator MainControl::end() const {
 MainControl::Iterator::Iterator(const MainControl* eurovision, int index) : 
 	eurovision(eurovision), index(index) {}
 
+//checks if left hand iterator is smaller than right hand iterator
 bool MainControl::Iterator::operator<(const MainControl::Iterator& it) const {
 	return (index < it.index);
 }
 
+//returns a participant reference to the participant the itartor is currently
+//pointing at
 const Participant& MainControl::Iterator::operator*() const {
 	return *(eurovision->contenders[index].participant);
 }
 
+//moves the iterator forward. 
 MainControl::Iterator& MainControl::Iterator::operator++() {
 	++index;
 	return *this;
 }
 
+//checks if 2 iterators point to the same element
 bool MainControl::Iterator::operator==(const MainControl::Iterator& it) const {
 	return (index == it.index);
 }
 
+//returns the name of the participant that's ranked i
 string MainControl::operator()(int i, VoterType type) {
 	Contender::Max max(type);
 	vector<Contender> vector;
@@ -355,6 +382,7 @@ string MainControl::operator()(int i, VoterType type) {
 MainControl::Contender::Max::Max(VoterType type) : type(type) {
 }
 
+//Functor, returns true if left hand argument is greater
 bool MainControl::Contender::Max::operator()(const Contender& c1,
 	const Contender& c2) {
 	if (type == Regular) {
@@ -379,6 +407,7 @@ bool MainControl::Contender::Max::operator()(const Contender& c1,
 	}
 }
 
+//returns the i-th largest in a container (where i is a natural number)
 template<class Iter, class T, class Max>
 Iter MainControl::get(Iter begin, Iter end, Max max, int i) {
 	if (i <= 0) return end;
