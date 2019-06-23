@@ -82,10 +82,12 @@ Voter& Voter::operator++() {
 
 ostream& operator<<(ostream& os, const Voter& voter) {
 	string type = "";
-	if (voter.voterType() == Regular)
+	if (voter.voterType() == Regular) {
 		type = "Regular";
-	else
+	}
+	else {
 		type = "Judge";
+	}
 	return os << '<' << voter.state() << '/' << type << '>';
 }
 
@@ -130,7 +132,9 @@ int MainControl::legalParticipant(Participant participant) {
 	}
 	else if (participant.timeLength() > maxTimeLength)
 		return 0;
-	else return 1;
+	else {
+		return 1;
+	}
 }
 
 int MainControl::participate(string state){
@@ -361,13 +365,17 @@ bool MainControl::Contender::Max::operator()(const Contender& c1,
 		if (c1.getRegularVotes() == c2.getRegularVotes()) {
 			return (c1.getState() > c2.getState()); // if equal score, compare by state name
 		}
-		else return (c1.getRegularVotes() > c2.getRegularVotes());
+		else {
+			return (c1.getRegularVotes() > c2.getRegularVotes());
+		}
 	}
 	else if (type == Judge) {
 		if (c1.getJudgeVotes() == c2.getJudgeVotes()) {
 			return (c1.getState() > c2.getState());
 		}
-		else return (c1.getJudgeVotes() > c2.getJudgeVotes());
+		else {
+			return (c1.getJudgeVotes() > c2.getJudgeVotes());
+		}
 	}
 	else {
 		int sum1 = c1.getJudgeVotes() + c1.getRegularVotes();
@@ -375,7 +383,9 @@ bool MainControl::Contender::Max::operator()(const Contender& c1,
 		if (sum1 == sum2) {
 			return (c1.getState() > c2.getState());
 		}
-		else return (sum1 > sum2);
+		else {
+			return (sum1 > sum2);
+		}
 	}
 }
 
