@@ -105,7 +105,7 @@ private:
 	int maxParticipants;
 	int maxVotes;
 	int participantsAmount;
-	class Contender {
+	class Contender { //a class that contains a pointer to a participant and holds the scores it got. 
 	public:
 		Participant* participant;
 		int regularVotes;
