@@ -16,26 +16,30 @@ Participant::Participant(string stateName, string songName, int songDuration,
 	singerName(singerName),
 	registration(false){}
 
+// returns the state string of a participant
 string Participant::state() const {
 	return stateName;
 }
 
+// returns the song string of a participant
 string Participant::song() const {
 	return songName;
 }
 
+// returns the length of the song of a participant
 int Participant::timeLength() const {
 	return songDuration;
 }
-
+// returns the name string of a participant
 string Participant::singer() const {
 	return singerName;
 }
-
+// returns if the participant is registered or not
 int Participant::isRegistered() const {
 	return registration;
 }
 
+// allows the user to update the participants info, provided the participant is not registered
 void Participant::update(string songName, int songDuration, string singerName){
 	if ((*this).isRegistered()) return;
 	if (songName != "") {
@@ -49,10 +53,12 @@ void Participant::update(string songName, int songDuration, string singerName){
 	}
 }
 
+// allows the user to update if the participant is registered or not
 void Participant::updateRegistered(bool registration) {
 	this->registration = registration;
 }
 
+// prints the participant information
 ostream& operator<<(ostream& os, const Participant& participant) {
 	return os << '[' << participant.state() << '/' << participant.song()
 		<< '/' << participant.timeLength() << '/' << participant.singer() 
@@ -63,23 +69,28 @@ Voter::Voter(string state, VoterType type) :
 	type(type), voterState(state), timesVoted(0){
 }
 
+// returns the state string of a voter
 string Voter::state() const {
 	return voterState;
 }
 
+// returns the type string of a voter
 VoterType Voter::voterType() const {
 	return type;
 }
 
+// returns how many times the voter have voted
 int Voter::timesOfVotes() const {
 	return timesVoted;
 }
 
+// allows the user to increase the number of times that a voter have voted by 1
 Voter& Voter::operator++() {
 	++timesVoted;
 	return *this;
 }
 
+// prints the voter information
 ostream& operator<<(ostream& os, const Voter& voter) {
 	string type = "";
 	if (voter.voterType() == Regular) {
@@ -118,6 +129,7 @@ MainControl::~MainControl() {
 	delete[] contenders;
 }
 
+// allows the user to set the phase of the compatition
 void MainControl::setPhase(Phase newPhase) {
 	if (phase == Registration && newPhase == Voting) return;
 	if (phase == Contest && newPhase == Registration) return;
@@ -125,6 +137,7 @@ void MainControl::setPhase(Phase newPhase) {
 	phase = newPhase;
 }
 
+// checks if the participant under check is legal under the requirments set for the compatition
 int MainControl::legalParticipant(Participant participant) {
 	if (participant.song() == "" || participant.state() == ""
 		|| participant.singer() == "") {
@@ -137,6 +150,7 @@ int MainControl::legalParticipant(Participant participant) {
 	}
 }
 
+// checks if a participant is registered to the compatition in question
 int MainControl::participate(string state){
 	for (int i = 0; i < participantsAmount; i++) {
 		if (contenders[i].participant == NULL) return 0;
@@ -157,6 +171,8 @@ int MainControl::findContender(string state) {
 	}
 	return -1;
 }
+
+// allows the user to register a given participant to the compatition
 MainControl& MainControl::operator+=(Participant& participant) {
 	if (phase != Registration) return *this;
 	if (participantsAmount == maxParticipants) return *this;
@@ -167,6 +183,8 @@ MainControl& MainControl::operator+=(Participant& participant) {
 	participant.updateRegistered(1);
 	return *this;
 }
+
+// allows the user to unregister a participant from the compatition
 MainControl& MainControl::operator-=(Participant& participant) {
 	if (phase != Registration) return *this;
 	if (participantsAmount == 0) return *this;
