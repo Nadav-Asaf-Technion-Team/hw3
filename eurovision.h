@@ -33,7 +33,8 @@ public:
 	// NO OTHER METHODS SHOULD APPEAR HERE.
 
 	// NO friend is allowed here.
-	Participant(string stateName, string songName, int songDuration, string singerName);
+	Participant(string stateName, string songName, int songDuration,
+		string singerName);
 	~Participant() = default;
 	string state() const;
 	string song()const;
