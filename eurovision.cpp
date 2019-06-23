@@ -1,9 +1,12 @@
 #include <iostream>
-
+#include<algorithm>
+#include<vector>
 #include "eurovision.h"
 
 using std::cout;
 using std::endl;
+using std::sort;
+using std::vector;
 
 Participant::Participant(string stateName, string songName, int songDuration,
 	string singerName) :
@@ -56,9 +59,8 @@ ostream& operator<<(ostream& os, const Participant& participant) {
 		<< ']';
 }
 
-Voter::Voter(string state, VoterType type) :
-	voterState(state), type(type), timesVoted(0) {
-
+Voter::Voter(string state, VoterType type) : 
+	type(type), voterState(state), timesVoted(0){
 }
 
 string Voter::state() const {
@@ -104,11 +106,9 @@ Vote::Vote(Voter& voter, const string state0, const string state1,
 	states[9] = state9;
 }
 
-
-MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes): 
-maxTimeLength(maxTimeLength), maxParticipants(maxParticipants),
-maxVotes(maxVotes), participantsAmount(0), phase(Registration),
-contenders(new Contender[maxParticipants]) {
+MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
+	phase(Registration), maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes),
+	participantsAmount(0) ,contenders(new Contender[maxParticipants]) {
 }
 
 MainControl::~MainControl() {
@@ -168,9 +168,7 @@ MainControl& MainControl::operator-=(Participant& participant) {
 	if (!legalParticipant(participant)) return *this;
 	int flag = 0;
 	for (int i = 0; i < participantsAmount; i++) {
-		if (participant.state() == (*(contenders[i].participant)).state()) {
-			flag = 1;
-		}
+		if (&participant == contenders[i].participant) flag = 1;
 		if (flag == 1) {
 			contenders[i] = contenders[i+1];
 		}
@@ -185,6 +183,7 @@ MainControl& MainControl::operator-=(Participant& participant) {
 
 MainControl& MainControl::operator+=(Vote vote) {
 	if (phase != Voting) return *this;
+	bool flag = false;
 	if (!participate(vote.voter.state())) return *this;
 	if (vote.voter.voterType() == Regular) {
 		if (vote.voter.state() == vote.states[0]) return *this;
@@ -192,6 +191,7 @@ MainControl& MainControl::operator+=(Vote vote) {
 		int contenderIndex = findContender(vote.states[0]);
 		if (contenderIndex == -1) return *this;
 		contenders[contenderIndex].addRegularVotes(1);
+		flag = true;
 	}
 	else { //Judge
 		if (vote.voter.timesOfVotes() >= 1) return *this;
@@ -199,6 +199,7 @@ MainControl& MainControl::operator+=(Vote vote) {
 			if (vote.states[i] == vote.voter.state()) continue;
 			int contenderIndex = findContender(vote.states[i]);
 			if (contenderIndex == -1) continue;
+			flag = true;
 			int points = 0;
 			switch (i) {
 			case 0: points = 12;
@@ -221,13 +222,11 @@ MainControl& MainControl::operator+=(Vote vote) {
 				break;
 			case 9: points = 1;
 				break;
-			default: 0;
-				break;
 			}
 			contenders[contenderIndex].addJudgeVotes(points);
 		}
 	}
-	++vote.voter;
+	if (flag == true) ++vote.voter;
 	return *this;
 }
 
@@ -276,21 +275,20 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 }
 
 
-MainControl::Contender::Contender(Participant* p, int regularVotes,
-	int judgeVotes) :  participant(p), regularVotes(regularVotes),
-					   judgeVotes(judgeVotes) {};
+MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
+	participant(p), regularVotes(regularVotes),
+		judgeVotes(judgeVotes) {}
 
-MainControl::Contender::Contender() :participant(NULL), regularVotes(0),
-	judgeVotes(0) {
-};
+MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
+}
 
-string MainControl::Contender::getState() {
+string MainControl::Contender::getState() const{
 		return (*participant).state();
-	};
-int MainControl::Contender::getRegularVotes() {
+	}
+int MainControl::Contender::getRegularVotes() const {
 		return regularVotes;
 	}
-int MainControl::Contender::getJudgeVotes() {
+int MainControl::Contender::getJudgeVotes() const {
 		return judgeVotes;
 	}
 void MainControl::Contender::addRegularVotes(int newVotes) {
@@ -299,3 +297,89 @@ void MainControl::Contender::addRegularVotes(int newVotes) {
 void MainControl::Contender::addJudgeVotes(int newVotes) {
 		judgeVotes += newVotes;
 	}
+bool MainControl::Contender::operator==(const Contender& c) const {
+	return (participant == c.participant);
+}
+
+MainControl::Iterator::Iterator() : eurovision(NULL), index(0) {}
+
+MainControl::Iterator MainControl::begin() const {
+	return Iterator(this, 0);
+}
+
+MainControl::Iterator MainControl::end() const {
+	return Iterator(this, participantsAmount);
+}
+
+MainControl::Iterator::Iterator(const MainControl* eurovision, int index) : 
+	eurovision(eurovision), index(index) {}
+
+bool MainControl::Iterator::operator<(const MainControl::Iterator& it) const {
+	return (index < it.index);
+}
+
+const Participant& MainControl::Iterator::operator*() const {
+	return *(eurovision->contenders[index].participant);
+}
+
+MainControl::Iterator& MainControl::Iterator::operator++() {
+	++index;
+	return *this;
+}
+
+bool MainControl::Iterator::operator==(const MainControl::Iterator& it) const {
+	return (index == it.index);
+}
+
+string MainControl::operator()(int i, VoterType type) {
+	Contender::Max max(type);
+	vector<Contender> vector;
+	for (int i = 0; i < participantsAmount; i++) {
+		vector.push_back(contenders[i]);
+	}
+	std::vector<Contender>::iterator iter = get<std::vector<Contender>::iterator, Contender, Contender::Max>
+		(vector.begin(),vector.end(), max, i);
+	if (iter == vector.end()) return "";
+	return (*iter).getState();
+}
+
+MainControl::Contender::Max::Max(VoterType type) : type(type) {
+}
+
+bool MainControl::Contender::Max::operator()(const Contender& c1, const Contender& c2) {
+	if (type == Regular) {
+		if (c1.getRegularVotes() == c2.getRegularVotes()) {
+			return (c1.getState() > c2.getState()); // if equal score, compare by state name
+		}
+		else return (c1.getRegularVotes() > c2.getRegularVotes());
+	}
+	else if (type == Judge) {
+		if (c1.getJudgeVotes() == c2.getJudgeVotes()) {
+			return (c1.getState() > c2.getState());
+		}
+		else return (c1.getJudgeVotes() > c2.getJudgeVotes());
+	}
+	else {
+		int sum1 = c1.getJudgeVotes() + c1.getRegularVotes();
+		int sum2 = c2.getJudgeVotes() + c2.getRegularVotes();
+		if (sum1 == sum2) {
+			return (c1.getState() > c2.getState());
+		}
+		else return (sum1 > sum2);
+	}
+}
+
+template<class Iter, class T, class Max>
+Iter MainControl::get(Iter begin, Iter end, Max max, int i) {
+	if (i <= 0) return end;
+	vector<T> newVector;
+	for (Iter it = begin; it < end; ++it) {
+		newVector.push_back(*it);
+	}
+	if (newVector.size() < i) return end;
+	sort(newVector.begin(), newVector.end(), max);
+	for (Iter res = begin; res < end; ++res) {
+		if (*res == newVector[i - 1]) return res;
+	}
+	return end;
+}

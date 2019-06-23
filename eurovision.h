@@ -53,7 +53,7 @@ ostream& operator<<(ostream& os, const Participant& participant);
 class Voter
 {
 	// relevant private members can be defined here, if necessary.
-	const VoterType type;
+	VoterType type;
 	const string voterState;
 	int timesVoted;
 
@@ -111,16 +111,29 @@ private:
 		int judgeVotes;
 		Contender(Participant* p, int regularVotes = 0, int judgeVotes = 0);
 		Contender();
-		string getState();
-		int getRegularVotes();
-		int getJudgeVotes();
+		string getState() const;
+		int getRegularVotes() const;
+		int getJudgeVotes() const;
 		void addRegularVotes(int newVotes);
 		void addJudgeVotes(int newVotes);
+		bool operator==(const Contender& c) const;
+		//Functor, returns true if left hand argument is greater
+		class Max {
+			VoterType type;
+		public:
+			Max(VoterType type);
+			~Max() = default;
+			bool operator()(const Contender& c1, const Contender& c2);
+		};
 	};
 	Contender* contenders;
 	int findContender(string state);
 	static void Swap(Contender& a, Contender& b);
 	static void BubbleSort(Contender* arr, int n);
+	//Iterator for iterator's type, T for the type of objects in the container, Max for the functor 
+	//that will compare objects
+	template<class Iter, class T, class Max>
+	Iter get(Iter begin, Iter end, Max max, int i);
 
 public:
 	// need to define here possibly c'tr and d'tr and ONLY methods that
@@ -138,8 +151,26 @@ public:
 	MainControl& operator+=(Vote vote);
 	MainControl& operator-=(Participant& participant);
 	friend ostream& operator<<(ostream& os, const MainControl& eurovision);
+	class Iterator;
+	Iterator begin() const;
+	Iterator end() const;
+	string operator()(int i, VoterType type);
 };
 
+class MainControl::Iterator {
+	const MainControl* eurovision;
+	int index;
+	Iterator(const MainControl* eurovision, int index);
+	friend class MainControl;
+public:
+	Iterator();
+	const Participant& operator*() const;
+	bool operator<(const Iterator& it) const;
+	Iterator& operator++();
+	bool operator==(const Iterator& it) const;
+	Iterator(const Iterator& it) = default;
+	Iterator& operator=(const Iterator& it) = default;
+};
 // -----------------------------------------------------------
 
 #endif

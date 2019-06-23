@@ -1,349 +1,555 @@
 
-/**************************************************************************
-234124 - Introduction To Systems Programming
-Spring 2019
-HW3 - C++
-
-In charge : Israel Gutter
-			Noy Naor
-For questions and clarifications : Please use the forum in Moodle.
-**************************************************************************/
-
 #include <iostream>
 
 #include "eurovision.h"
 
 using std::cout;
 using std::endl;
+#include <fstream>
+using std::ifstream;
+using std::ofstream;
+using std::cerr;
+using std::endl;
 
-#define TEST(num)  cout << endl << "TEST" << " " << (num) << endl;
 
-
-int main()
-{
-
+void TEST1(){
+	ofstream to("../test1myresult.txt");
 	MainControl eurovision;
+    Participant p1("austria","song_austria",201,"singer_austria");
+    to<<p1<<endl;
+    Participant p2("luxembourg","song_luxembourg",167,"singer_luxembourg");
+    to<<p2<<endl;
+    Participant p3("malta","song_malta",224,"singer_malta");
+    to<<p3<<endl;
+    Participant p4("georgia","song_georgia",188,"singer_georgia");
+    to<<p4<<endl;
+    Participant p5("greece","song_greece",152,"singer_greece");
+    to<<p5<<endl;
+    Participant p6("germany","song_germany",131,"singer_germany");
+    to<<p6<<endl;
+    Participant p7("slovakia","song_slovakia",105,"singer_slovakia");
+    to<<p7<<endl;
+    Participant p8("turkey","song_turkey",148,"singer_turkey");
+    to<<p8<<endl;
+    Participant p9("belgium","song_belgium",183,"singer_belgium");
+    to<<p9<<endl;
+    Participant p10("cyrpus","song_cyrpus",125,"singer_cyrpus");
+    to<<p10<<endl;
+    Participant p11("bulgaria","song_bulgaria",104,"singer_bulgaria");
+    to<<p11<<endl;
+    Participant p12("norway","song_norway",198,"singer_norway");
+    to<<p12<<endl;
+    Participant p13("luxembourg","song_luxembourg",203,"singer_luxembourg");
+    to<<p13<<endl;
+    Participant p14("turkey","song_turkey",163,"singer_turkey");
+    to<<p14<<endl;
+    Participant p15("bosnia","song_bosnia",213,"singer_bosnia");
+    to<<p15<<endl;
+    Participant p16("ukraine","song_ukraine",109,"singer_ukraine");
+    to<<p16<<endl;
+    Participant p17("croatia","song_croatia",194,"singer_croatia");
+    to<<p17<<endl;
+    Participant p18("moldova","song_moldova",213,"singer_moldova");
+    to<<p18<<endl;
+    Participant p19("switzerland","song_switzerland",193,"singer_switzerland");
+    to<<p19<<endl;
+    Participant p20("spain","song_spain",161,"singer_spain");
+    to<<p20<<endl;
+    Participant p21("netherlands","song_netherlands",150,"singer_netherlands");
+    to<<p21<<endl;
+    Participant p22("armenia","song_armenia",183,"singer_armenia");
+    to<<p22<<endl;
+    Participant p23("croatia","song_croatia",143,"singer_croatia");
+    to<<p23<<endl;
+    Participant p24("sweden","song_sweden",191,"singer_sweden");
+    to<<p24<<endl;
+    Participant p25("hungary","song_hungary",111,"singer_hungary");
+    to<<p25<<endl;
+    Participant p26("slovenia","song_slovenia",150,"singer_slovenia");
+    to<<p26<<endl;
+    Participant p27("andora","song_andora",136,"singer_andora");
+    to<<p27<<endl;
+    Participant p28("cyrpus","song_cyrpus",152,"singer_cyrpus");
+    to<<p28<<endl;
+    Participant p29("belarus","song_belarus",180,"singer_belarus");
+    to<<p29<<endl;
+    Participant p30("austria","song_austria",212,"singer_austria");
+    to<<p30<<endl;
+    Participant p31("uk","song_uk",224,"singer_uk");
+    to<<p31<<endl;
+    Participant p32("slovenia","song_slovenia",131,"singer_slovenia");
+    to<<p32<<endl;
+    Participant p33("lithiania","song_lithiania",178,"singer_lithiania");
+    to<<p33<<endl;
+    Participant p34("greece","song_greece",147,"singer_greece");
+    to<<p34<<endl;
+    Participant p35("sweden","song_sweden",218,"singer_sweden");
+    to<<p35<<endl;
+    Participant p36("bulgaria","song_bulgaria",209,"singer_bulgaria");
+    to<<p36<<endl;
+    p36.update("new_song",0,"");
+    p35.update("new_song",0,"");
+    p19.update("new_song",0,"");
+    p32.update("new_song",0,"");
+    p31.update("new_song",0,"newsinger");
+    p27.update("new_song",0,"newsinger");
+    p18.update("new_song",0,"newsinger");
+    p28.update("new_song",0,"newsinger");
+    p4.update("new_song",129,"newsinger");
+    p9.update("new_song",109,"newsinger");
+    p13.update("new_song",193,"newsinger");
+    p24.update("new_song",175,"newsinger");
+    to<<eurovision<<endl;
+    eurovision+=p5;
+    eurovision+=p28;
+    eurovision+=p35;
+    eurovision+=p26;
+    eurovision+=p14;
+    eurovision+=p4;
+    eurovision+=p23;
+    eurovision+=p17;
+    eurovision+=p7;
+    eurovision+=p30;
+    eurovision+=p5;
+    eurovision+=p34;
+    eurovision+=p13;
+    eurovision+=p29;
+    to<<eurovision<<endl;
+    eurovision-=p10;
+    eurovision-=p25;
+    eurovision-=p15;
+    eurovision+=p3;
+    eurovision+=p12;
+    eurovision+=p13;
+    eurovision-=p6;
+    eurovision+=p9;
+    eurovision-=p26;
+    eurovision+=p10;
+    eurovision+=p16;
+    eurovision-=p11;
+    eurovision+=p15;
+    eurovision-=p18;
+    eurovision+=p20;
+    eurovision+=p13;
+    eurovision-=p31;
+    eurovision+=p23;
+    eurovision+=p2;
+    eurovision-=p29;
+    eurovision+=p12;
+    eurovision-=p30;
+    eurovision-=p31;
+    eurovision-=p18;
+    to<<eurovision<<endl;
+    ((((((((((((((eurovision-=p33)
+    +=p15)+=p19)-=p16)-=p36)+=p16)+=p27)-=p27)+=p30)-=p32)+=p30)+=p20)
+            -=p12)+=p20);
+    MainControl::Iterator i;
+    for (i = eurovision.begin(); i<eurovision.end(); ++i)
+        to << *i << endl;
+    for (i = eurovision.begin(); !(i==eurovision.end()); ++i)
+        to << *i << endl;
+    eurovision.setPhase(Contest);
+    eurovision.setPhase(Voting);
+    eurovision.participate("germany");
+    eurovision.participate("croatia");
+    eurovision.participate("luxembourg");
+    eurovision.participate("spain");
+    eurovision.participate("latvia");
+    eurovision.participate("bosnia");
+    eurovision.participate("turkey");
+    eurovision.participate("lithiania");
+    eurovision.participate("ukraine");
+    eurovision.participate("austria");
+    eurovision.participate("bosnia");
+    eurovision.participate("moldova");
+    eurovision.participate("israel");
+    eurovision.participate("sweden");
+    p20.update("",120,"");
+    to<<p20<<endl;
+    p9.update("",120,"");
+    to<<p9<<endl;
+    p19.update("",120,"");
+    to<<p19<<endl;
+    p17.update("",120,"");
+    to<<p17<<endl;
+    p5.update("",120,"");
+    to<<p5<<endl;
+    p1.update("",120,"");
+    to<<p1<<endl;
+    p27.update("",120,"");
+    to<<p27<<endl;
+    p34.update("",120,"");
+    to<<p34<<endl;
+    p28.update("",120,"");
+    to<<p28<<endl;
+    p13.update("",120,"");
+    to<<p13<<endl;
+    p28.update("",120,"");
+    to<<p28<<endl;
+    p20.update("",120,"");
+    to<<p20<<endl;
+    p14.update("",120,"");
+    to<<p14<<endl;
+    p15.update("",120,"");
+    to<<p15<<endl;
+    Voter v1("italy",Judge);
+    Voter v2("bulgaria");
+    Voter v3("belgium",Judge);
+    Voter v4("sweden",Regular);
+    Voter v5("belgium",Regular);
+    Voter v6("sweden",Regular);
+    Voter v7("sweden",Regular);
+    Voter v8("germany",Regular);
+    Voter v9("uk",Judge);
+    Voter v10("switzerland",Judge);
+    Voter v11("kazakhastan");
+    Voter v12("luxembourg");
+    Voter v13("kazakhastan",Regular);
+    Voter v14("spain",Regular);
+    Voter v15("israel",Judge);
+    Voter v16("serbia",Judge);
+    Voter v17("estonia",Judge);
+    Voter v18("slovakia",Judge);
+    Voter v19("spain",Judge);
+    Voter v20("malta",Regular);
+    Voter v21("lithiania");
+    Voter v22("russia");
+    Voter v23("slovakia",Judge);
+    Voter v24("malta",Regular);
+    Voter v25("uk",Judge);
+    Voter v26("france",Judge);
+    Voter v27("bulgaria");
+    Voter v28("luxembourg",Regular);
+    Voter v29("france",Judge);
+    Voter v30("serbia");
+    Voter v31("malta");
+    Voter v32("lithiania",Judge);
+    Voter v33("slovakia",Regular);
+    Voter v34("ukraine",Regular);
+    Voter v35("armenia",Regular);
+    Voter v36("slovakia",Judge);
+    Voter v37("norway",Regular);
+    Voter v38("cyrpus",Judge);
+    Voter v39("croatia");
+    Voter v40("croatia",Regular);
+    Voter v41("france",Judge);
+    Voter v42("latvia",Regular);
+    Voter v43("armenia",Judge);
+    Voter v44("belarus",Judge);
+    Voter v45("ukraine");
+    Voter v46("latvia");
+    Voter v47("croatia");
+    Voter v48("italy",Regular);
+    Voter v49("greece");
+    Voter v50("bosnia");
+    Voter v51("kazakhastan",Regular);
+    Voter v52("slovenia",Judge);
+    Voter v53("serbia",Judge);
+    Voter v54("cyrpus");
+    Voter v55("armenia",Judge);
+    Voter v56("israel",Judge);
+    Voter v57("malta",Judge);
+    Voter v58("bosnia",Regular);
+    Voter v59("cyrpus",Judge);
+    Voter v60("kazakhastan");
+    Voter v61("georgia",Judge);
+    Voter v62("slovakia");
+    Voter v63("slovakia",Judge);
+    Voter v64("bulgaria",Regular);
+    Voter v65("malta",Regular);
+    Voter v66("croatia",Regular);
+    Voter v67("uk",Regular);
+    Voter v68("turkey",Regular);
+    Voter v69("hungary",Regular);
+    Voter v70("moldova",Regular);
+    Voter v71("kazakhastan",Judge);
+    Voter v72("hungary",Judge);
+    Voter v73("italy");
+    Voter v74("norway",Regular);
+    Voter v75("ireland",Regular);
+    Voter v76("bulgaria",Judge);
+    Voter v77("belgium",Regular);
+    Voter v78("ukraine",Judge);
+    Voter v79("turkey");
+    Voter v80("spain",Regular);
+    Voter v81("bulgaria");
+    Voter v82("israel",Judge);
+    Voter v83("malta");
+    Voter v84("russia",Regular);
+    Voter v85("uk");
+    Voter v86("bulgaria");
+    Voter v87("norway",Regular);
+    Voter v88("bulgaria");
+    Voter v89("austria",Regular);
+    Voter v90("cyrpus");
+    Voter v91("croatia",Regular);
+    Voter v92("latvia");
+    Voter v93("israel",Regular);
+    Voter v94("andora");
+    Voter v95("armenia");
+    Voter v96("latvia");
+    Voter v97("georgia",Judge);
+    Voter v98("austria");
+    Voter v99("slovenia");
+    to<<eurovision<<endl;
+    eurovision+=Vote(v72,"germany","kazakhastan","moldova","spain","bulgaria");
+    eurovision+=Vote(v19,"malta","switzerland","luxembourg","lithiania","moldova","spain","slovenia");
+    eurovision+=Vote(v42,"hungary");
+    eurovision+=Vote(v94,"croatia");
+    eurovision+=Vote(v98,"austria");
+    eurovision+=Vote(v3,"austria","russia","ukraine","croatia","luxembourg","norway","germany","kazakhastan","bosnia");
+    eurovision+=Vote(v96,"israel");
+    eurovision+=Vote(v14,"netherlands");
+    eurovision+=Vote(v64,"andora");
+    eurovision+=Vote(v20,"switzerland");
+    eurovision+=Vote(v81,"slovakia");
+    eurovision+=Vote(v34,"hungary");
+    eurovision+=Vote(v63,"slovenia","belarus","georgia");
+    eurovision+=Vote(v36,"malta");
+    eurovision+=Vote(v89,"armenia");
+    eurovision+=Vote(v1,"israel","netherlands","austria","slovakia");
+    eurovision+=Vote(v6,"hungary");
+    eurovision+=Vote(v51,"kazakhastan");
+    eurovision+=Vote(v93,"croatia");
+    eurovision+=Vote(v66,"latvia");
+    eurovision+=Vote(v5,"belarus");
+    eurovision+=Vote(v2,"ukraine");
+    eurovision+=Vote(v50,"france");
+    eurovision+=Vote(v87,"sweden");
+    eurovision+=Vote(v34,"slovakia");
+    eurovision+=Vote(v56,"ireland","turkey","belgium","bosnia","armenia","austria");
+    eurovision+=Vote(v27,"ireland");
+    eurovision+=Vote(v31,"turkey");
+    eurovision+=Vote(v19,"austria","serbia","slovenia","turkey","estonia");
+    eurovision+=Vote(v77,"ireland");
+    eurovision+=Vote(v2,"hungary");
+    eurovision+=Vote(v73,"spain");
+    eurovision+=Vote(v33,"kazakhastan");
+    eurovision+=Vote(v83,"france");
+    eurovision+=Vote(v34,"ukraine");
+    eurovision+=Vote(v96,"kazakhastan");
+    eurovision+=Vote(v60,"serbia");
+    eurovision+=Vote(v2,"malta");
+    eurovision+=Vote(v45,"hungary");
+    eurovision+=Vote(v68,"norway");
+    eurovision+=Vote(v72,"hungary");
+    eurovision+=Vote(v7,"israel");
+    eurovision+=Vote(v93,"greece");
+    eurovision+=Vote(v14,"estonia");
+    eurovision+=Vote(v71,"latvia","malta","italy","switzerland");
+    eurovision+=Vote(v88,"russia");
+    eurovision+=Vote(v41,"hungary","armenia","norway","bosnia","greece","slovenia","croatia");
+    eurovision+=Vote(v16,"sweden","france","belgium","andora","slovenia");
+    eurovision+=Vote(v31,"croatia");
+    eurovision+=Vote(v86,"kazakhastan");
+    eurovision+=Vote(v29,"luxembourg","serbia","switzerland","greece","kazakhastan","bulgaria");
+    eurovision+=Vote(v26,"hungary");
+    eurovision+=Vote(v95,"russia");
+    eurovision+=Vote(v28,"armenia");
+    eurovision+=Vote(v67,"sweden");
+    eurovision+=Vote(v75,"moldova");
+    eurovision+=Vote(v59,"croatia","slovenia","russia","norway","ireland","netherlands","luxembourg");
+    eurovision+=Vote(v92,"bulgaria");
+    eurovision+=Vote(v46,"france");
+    eurovision+=Vote(v66,"hungary");
+    eurovision+=Vote(v52,"georgia","andora","spain","serbia","ireland","estonia","hungary");
+    eurovision+=Vote(v4,"bulgaria");
+    eurovision+=Vote(v10,"luxembourg","russia","israel","norway");
+    eurovision+=Vote(v23,"slovakia","ukraine","bulgaria","serbia","switzerland","kazakhastan","slovenia","estonia","moldova","belgium");
+    eurovision+=Vote(v89,"ireland");
+    eurovision+=Vote(v30,"cyrpus");
+    eurovision+=Vote(v91,"croatia");
+    eurovision+=Vote(v21,"bosnia");
+    eurovision+=Vote(v98,"slovakia");
+    eurovision+=Vote(v83,"moldova");
+    eurovision+=Vote(v5,"malta");
+    eurovision+=Vote(v25,"estonia","ukraine","georgia","slovakia","belarus","lithiania","austria","netherlands");
+    eurovision+=Vote(v23,"armenia","turkey","slovakia");
+    eurovision+=Vote(v20,"bosnia");
+    eurovision+=Vote(v27,"spain");
+    eurovision+=Vote(v83,"sweden");
+    eurovision+=Vote(v80,"spain");
+    eurovision+=Vote(v18,"hungary","croatia");
+    eurovision+=Vote(v99,"sweden");
+    eurovision+=Vote(v13,"belgium");
+    eurovision+=Vote(v99,"greece");
+    eurovision+=Vote(v52,"lithiania","estonia","slovakia","germany");
+    eurovision+=Vote(v85,"norway");
+    eurovision+=Vote(v66,"france");
+    eurovision+=Vote(v54,"slovakia");
+    eurovision+=Vote(v38,"lithiania","serbia","ireland","israel","spain");
+    eurovision+=Vote(v64,"latvia");
+    eurovision+=Vote(v15,"bosnia","switzerland","estonia");
+    eurovision+=Vote(v13,"georgia");
+    eurovision+=Vote(v33,"bosnia");
+    eurovision+=Vote(v18,"bulgaria","georgia","israel","spain");
+    eurovision+=Vote(v17,"andora","netherlands","israel","armenia","slovenia","russia","turkey");
+    eurovision+=Vote(v31,"spain");
+    eurovision+=Vote(v18,"kazakhastan");
+    eurovision+=Vote(v24,"switzerland");
+    eurovision+=Vote(v61,"spain","france","moldova");
+    eurovision+=Vote(v26,"georgia","bulgaria","sweden","croatia","kazakhastan","italy");
+    eurovision+=Vote(v73,"france");
+    eurovision+=Vote(v77,"israel");
+    eurovision+=Vote(v41,"greece");
+    eurovision+=Vote(v48,"austria");
+    eurovision+=Vote(v19,"switzerland");
+    eurovision+=Vote(v56,"bosnia");
+    eurovision+=Vote(v40,"sweden");
+    eurovision+=Vote(v53,"germany","moldova","malta","greece","israel","croatia","sweden");
+    eurovision+=Vote(v84,"germany");
+    eurovision+=Vote(v79,"turkey");
+    eurovision+=Vote(v87,"malta");
+    eurovision+=Vote(v81,"norway");
+    eurovision+=Vote(v93,"italy");
+    eurovision+=Vote(v53,"france","bosnia","cyrpus","norway","ireland","belgium","ukraine","lithiania");
+    eurovision+=Vote(v4,"croatia");
+    eurovision+=Vote(v17,"greece","turkey","serbia","bulgaria");
+    eurovision+=Vote(v36,"russia");
+    eurovision+=Vote(v32,"slovenia");
+    eurovision+=Vote(v50,"norway");
+    eurovision+=Vote(v48,"austria");
+    eurovision+=Vote(v22,"hungary");
+    eurovision+=Vote(v55,"netherlands","austria","turkey","kazakhastan");
+    eurovision+=Vote(v46,"latvia");
+    eurovision+=Vote(v40,"sweden");
+    eurovision+=Vote(v65,"spain");
+    eurovision+=Vote(v51,"estonia");
+    eurovision+=Vote(v39,"georgia");
+    eurovision+=Vote(v71,"latvia","ireland","kazakhastan","turkey");
+    eurovision+=Vote(v31,"turkey");
+    eurovision+=Vote(v70,"armenia");
+    eurovision+=Vote(v17,"turkey","georgia","spain","belgium","estonia","norway","netherlands");
+    eurovision+=Vote(v59,"croatia","hungary","kazakhastan","cyrpus","israel","france","italy","estonia");
+    eurovision+=Vote(v18,"turkey","latvia","hungary","bosnia","italy","bulgaria","spain","belgium","russia");
+    eurovision+=Vote(v73,"luxembourg");
+    eurovision+=Vote(v67,"italy");
+    eurovision+=Vote(v67,"netherlands");
+    eurovision+=Vote(v57,"estonia","spain","slovenia","belgium","bulgaria");
+    eurovision+=Vote(v46,"armenia");
+    eurovision+=Vote(v4,"kazakhastan");
+    eurovision+=Vote(v7,"slovakia");
+    eurovision+=Vote(v19,"netherlands","lithiania","moldova","turkey","germany","armenia","greece","luxembourg","france");
+    eurovision+=Vote(v47,"sweden");
+    eurovision+=Vote(v35,"switzerland");
+    eurovision+=Vote(v1,"belarus");
+    eurovision+=Vote(v10,"hungary","russia","slovakia","luxembourg","armenia");
+    eurovision+=Vote(v47,"slovenia");
+    eurovision+=Vote(v87,"andora");
+    eurovision+=Vote(v97,"serbia","spain","ukraine","slovakia","greece");
+    eurovision+=Vote(v68,"belarus");
+    eurovision+=Vote(v47,"kazakhastan");
+    eurovision+=Vote(v66,"kazakhastan");
+    eurovision+=Vote(v69,"spain");
+    eurovision+=Vote(v52,"latvia","moldova","slovenia","italy");
+    eurovision+=Vote(v77,"andora");
+    eurovision+=Vote(v35,"norway");
+    eurovision+=Vote(v99,"malta");
+    eurovision+=Vote(v76,"ireland","israel","slovakia","ukraine","slovenia","netherlands");
+    eurovision+=Vote(v18,"cyrpus","italy","kazakhastan","ukraine","france","lithiania");
+    eurovision+=Vote(v5,"latvia");
+    eurovision+=Vote(v16,"latvia");
+    eurovision+=Vote(v75,"austria");
+    eurovision+=Vote(v7,"netherlands");
+    eurovision+=Vote(v71,"switzerland","turkey","greece","malta","belgium","norway","slovenia");
+    eurovision+=Vote(v73,"bosnia");
+    eurovision+=Vote(v95,"slovakia");
+    eurovision+=Vote(v67,"bosnia");
+    eurovision+=Vote(v15,"hungary","greece","andora");
+    eurovision+=Vote(v47,"austria");
+    eurovision+=Vote(v45,"cyrpus");
+    eurovision+=Vote(v40,"austria");
+    eurovision+=Vote(v85,"switzerland");
+    eurovision+=Vote(v77,"croatia");
+    eurovision+=Vote(v6,"slovenia");
+    eurovision+=Vote(v53,"cyrpus","israel","kazakhastan","belarus","ireland","ukraine","spain","malta");
+    eurovision+=Vote(v51,"serbia");
+    eurovision+=Vote(v30,"switzerland");
+    eurovision+=Vote(v22,"hungary");
+    eurovision+=Vote(v79,"estonia");
+    eurovision+=Vote(v57,"serbia");
+    eurovision+=Vote(v52,"germany","netherlands","slovakia");
+    eurovision+=Vote(v11,"sweden");
+    eurovision+=Vote(v89,"georgia");
+    eurovision+=Vote(v75,"malta");
+    eurovision+=Vote(v11,"russia");
+    eurovision+=Vote(v25,"armenia","hungary","georgia","russia","ireland","netherlands","slovenia","ukraine");
+    eurovision+=Vote(v52,"turkey");
+    eurovision+=Vote(v30,"ireland");
+    eurovision+=Vote(v33,"spain");
+    eurovision+=Vote(v52,"belgium","georgia","hungary","italy","netherlands","ireland","russia");
+    eurovision+=Vote(v55,"kazakhastan","bulgaria","croatia");
+    eurovision+=Vote(v46,"estonia");
+    eurovision+=Vote(v11,"norway");
+    eurovision+=Vote(v62,"switzerland");
+    eurovision+=Vote(v42,"sweden");
+    eurovision+=Vote(v3,"hungary","belgium","kazakhastan","estonia");
+    eurovision+=Vote(v94,"bulgaria");
+    eurovision+=Vote(v73,"hungary");
+    eurovision+=Vote(v61,"switzerland","belarus","georgia","italy","sweden","kazakhastan");
+    eurovision+=Vote(v88,"luxembourg");
+    eurovision+=Vote(v80,"ukraine");
+    eurovision+=Vote(v50,"austria");
+    eurovision+=Vote(v68,"lithiania");
+    p10.update("shouldnot",143,"error");
+    to<<p10<<endl;
+    p11.update("shouldnot",143,"error");
+    to<<p11<<endl;
+    p32.update("shouldnot",143,"error");
+    to<<p32<<endl;
+    p18.update("shouldnot",143,"error");
+    to<<p18<<endl;
+    p3.update("shouldnot",143,"error");
+    to<<p3<<endl;
+    p24.update("shouldnot",143,"error");
+    to<<p24<<endl;
+    p35.update("shouldnot",143,"error");
+    to<<p35<<endl;
+    p10.update("shouldnot",143,"error");
+    to<<p10<<endl;
+    p30.update("shouldnot",143,"error");
+    to<<p30<<endl;
+    p30.update("shouldnot",143,"error");
+    to<<p30<<endl;
+    p17.update("shouldnot",143,"error");
+    to<<p17<<endl;
+    p30.update("shouldnot",143,"error");
+    to<<p30<<endl;
+    p13.update("shouldnot",143,"error");
+    to<<p13<<endl;
+    p9.update("shouldnot",143,"error");
+    to<<p9<<endl;
+    to<<eurovision<<endl;
+    to<<eurovision(1,Regular)<<endl;
+    to<<eurovision(2,Regular)<<endl;
+    to<<eurovision(3,Regular)<<endl;
+    to<<eurovision(4,Regular)<<endl;
+    to<<eurovision(5,Regular)<<endl;
+    to<<eurovision(6,Regular)<<endl;
+    to<<eurovision(7,Regular)<<endl;
+    to<<eurovision(8,Regular)<<endl;
+    to<<eurovision(9,Regular)<<endl;
+    to<<eurovision(10,Regular)<<endl;
+    to<<eurovision(1,Judge)<<endl;
+    to<<eurovision(2,Judge)<<endl;
+    to<<eurovision(3,Judge)<<endl;
+    to<<eurovision(4,Judge)<<endl;
+    to<<eurovision(5,Judge)<<endl;
+    to<<eurovision(6,Judge)<<endl;
+    to<<eurovision(7,Judge)<<endl;
+    to<<eurovision(8,Judge)<<endl;
+    to<<eurovision(9,Judge)<<endl;
+    to<<eurovision(10,Judge)<<endl;
+    to<<eurovision(1,All)<<endl;
+    to<<eurovision(2,All)<<endl;
+    to<<eurovision(3,All)<<endl;
+    to<<eurovision(4,All)<<endl;
+    to<<eurovision(5,All)<<endl;
+    to<<eurovision(6,All)<<endl;
+    to<<eurovision(7,All)<<endl;
+    to<<eurovision(8,All)<<endl;
+    to<<eurovision(9,All)<<endl;
+    to<<eurovision(10,All)<<endl;
+    to<<eurovision<<endl;
 
-	/* The same as defining with the default values
-	   MainControl eurovision(180, 26, 5);
-	   180 - max allowed time length (seconds) of a song
-	   26 - max allowed number of participants
-	   5 - max allowed times that any regular voter (not judge) can vote.
-	   other inner default initializations :
-	   empty system at the start - no participants, no votes,
-	   phase of Registration.
-	*/
-
-
-	/* definitions of potential participants.
-	   still are not registered in the system.
-	   the values can be here any values, even empty string or 0 for
-	   time length.
-	   for example :
-	  Participant p1("Israel","Song_Israel",175,"Singer_Israel");
-	  means
-	  p1 is a potential participant with the following features :
-	  State : Israel
-	  Name of the song : Song_Israel
-	  time length of the song (seconds) : 175
-	  Name of the singer : Singer_Israel
-
-	  No problem to define here many potential participants with the
-	  same features, like state or Name of song etc.
-
-	  if the participant is not still registered in the system, no importance
-	  to its values which can be updated later, in condition that still
-	  it is not registered in the system.
-
-	*/
-	Participant p1("Israel", "Song_Israel", 175, "Singer_Israel");
-	Participant p2("UK", "Song_UK", 170, "Singer_UK");
-	Participant p3("France", "Song_France", 190, "Singer_France");
-	Participant p4("Australia", "Song_Australia", 180, "Singer_Australia");
-	Participant p5("Cyprus", "Song_Cyprus", 172, "Singer_Cyprus");
-
-	//  Participant p11(p1);  // compilation error. every potential participant
-							  //  is unique as an object. Can not be copied from
-							  //  another participant.*/
-
-	//  Participant p12; // compilation error. Must give values to all features.
-	//  Participant p13("","",0,""); // OK for here. This is not legal initialization,
-									 // however, there are values for all 4 basic features
-									 // and still p13 is not yet registered in the system,
-									 // so, as mentioned, it's OK for here.
-	//  p13=p1;  // compilation error. can not do such an assignment.
-
-	TEST("1.1")
-		cout << p1 << endl;
-	// displays p1 in a single line, in the format
-	// [Israel/Song_Israel/175/Singer_Israel]
-
-	TEST("1.2")
-		cout << p2 << endl << p4 << endl;
-	// we get here the following display :
-	// [UK/Song_UK/170/Singer_UK]
-	// [Australia/Song_Australia/180/Singer_Australia]
-
-	TEST("1.3")
-		cout << p1.state() << endl;  // output is Israel
-	cout << p1.song() << endl;  // output is Song_Israel
-	cout << p1.timeLength() << endl;  // output is 175
-	cout << p1.singer() << endl;  // output is Singer_Israel
-
-	TEST("1.4")
-		cout << p1.isRegistered() << endl; // output here is 0 because p1 here
-										   // still not registered in the system.
-	p1.update("new_name", 140, "new_singer"); // 3 parameters. No parameter for state name,
-											  // because it is NOT possible to change
-											  // the state name. if song name is "" then
-											  // the old name stays. the same is with the singer name.
-											  // if time length is 0 then the old one stays.
-											  // update can be done only if p1 is not registered, otherwise
-											  // nothing is done.
-
-	TEST("1.5")
-		cout << p1 << endl;
-	p1.update("Song_Israel", 175, "Singer_Israel");
-	cout << p1 << endl;
-
-	p1.updateRegistered(true); // Although it's a public method, we assume
-							   //   that ONLY MainControl will use it for
-							   //   inner purposes. p1 is signed as registered in the system.
-	p1.updateRegistered(false); // Same remarks. Now it is not registered.
-
-  //------------------------------------------------
-
-	TEST("1.6")
-		((((eurovision += p1) += p2) += p3) += p4) += p5;
-	/*
-	   try to register p1 and then p2 and the p3 and then p4 and then p5
-	   to the system;
-	   the registration will not succeed in the following cases :
-	   1. The current phase is not Registration.
-		  phase of the system is initialized by default to Registration.
-		  Then it can be changed by setPhase method, e.g.
-		  eurovision.setPhase(Contest);
-		  eurovision.setPhase(Voting);
-	   2. we've already reached to the max allowed number of participants (default is 26).
-	   3. There is already a registered participant from the relevant state.
-	   4. Name of state is "" or name of song or singer is "" or
-		  time length is greater than the max time allowed. default of max time
-		  allowed is 180 (sec).
-	   if registration fails, then just ignore it without anything else and
-	   continue to the next operation in the program.
-	   in this example p3 can not be registered bacause its time length 190
-	   is greater than the maximum allowed.
-	*/
-
-	cout << eurovision << endl;
-	/*
-	  displays the main features of the system.
-	  All the display is between curly brackets ({ in the first line, then continue
-	  to next line, then all the relevant data, then } in the last line.
-	  first line after { displays the phase - can be one of Registration or Contest or Voting.
-	  if phase is Registration, then all Registered participant are displayed
-	  sorted regarding state name. each state in a different line, in the same format
-	  as operator<< to a participant.
-	  if phase is Contest, nothing more is displayed.
-	  if phase is Voting, then all votes (both Regular and Judge) are displayed,
-	  in respect to all states of registered participants.
-	  each state in a different line. the states are sorted in respect to state name.
-
-	  example :
-	{
-	Registration
-	[Australia/Song_Australia/180/Singer_Australia]
-	[Cyprus/Song_Cyprus/172/Singer_Cyprus]
-	[Israel/Song_Israel/175/Singer_Israel]
-	[UK/Song_UK/170/Singer_UK]
-	}
-
-	  another example relevant to Voting phase - explanation will follow later :
-	{
-	Voting
-	Australia : Regular(0) Judge(8)
-	Cyprus : Regular(6) Judge(12)
-	Israel : Regular(1) Judge(0)
-	UK : Regular(1) Judge(10)
-	}
-
-	*/
-
-	eurovision -= p5;
-	/*
-	  unregister p5 from the system.
-	  it is allowed to do this only in the Registration phase.
-	  Moreover, if p5 is not registered, then just ignore the operation without
-	  further notice.
-
-	  can also do operations like
-
-	  (((eurovision -= p5) -= p3) += p4) -= p4;
-
-	*/
-
-	TEST("1.7")
-		(((eurovision -= p5) -= p3) += p4) -= p4;
-	cout << eurovision << endl;
-
-	((eurovision += p4) += p3) += p5;
-	cout << eurovision << endl;
-
-	eurovision.setPhase(Voting);
-	/*
-	  There are 3 phases :
-	  Registration - Registration and unregistration of participants.
-	  This is the default initial phase.
-	  Contest - This phase symbolizes the performance off all songs on the stage.
-	  Voting - in this stage we do and count the voting.
-	  The move from Registration to Contest and/or from Contest to Voting
-	  is done via the operation setPhase(<new_phase>).
-	  It's possible to move ONLY from Registration to Contest and from Contest to
-	  Voting. in all other cases nothing is done and the operation is ignored.
-	  No other special treatment.
-	  In this example the operation
-	  eurovision.setPhase(Voting);
-	  is ignored because we are still in the phase of Registration.
-	*/
-
-	eurovision.setPhase(Contest);
-	eurovision.setPhase(Voting);  // will work now.
-
-
-	TEST("1.8")
-		cout << eurovision.legalParticipant(p1); // will display 1 (bool)
-	cout << eurovision.legalParticipant(p3); // will display 0 (false)
-
-	/* the operation legalParticipant checks if all the following exists :
-	   the names of the state and the song and the singer are not empty "",
-	   as well as time length of the song is not big than the max allowed time length
-	   for any song. this max allowed value is determined when defining the
-	   system object. default is 180 (sec).
-	*/
-
-	TEST("1.9")
-		cout << p2 << endl;
-	p2.update("", 169, "");  // can not be done. it is not Registration phase.
-	cout << p2 << endl;
-
-	cout << p3 << endl;
-	p3.update("", 179, "");  // can not be done. it's not Registration phase.
-	cout << p3 << endl;
-
-	eurovision += p3; //can not be done. it's not Registration phase.
-
-	cout << eurovision << endl;
-
-	eurovision -= p1; //can not be done. it's not Registration phase.
-	cout << eurovision << endl;
-
-	TEST("1.10")
-		cout << eurovision.participate("Israel");  // 1 (true). The state Israel is registered and participates.
-	cout << eurovision.participate("France");  // 0 (false). France is not registered, therefoe does not participate.
-
-	cout << "------------------------------" << endl;
-
-
-	Voter vr1("Israel");
-	/* vr1 is a potential voter that comes from Israel.
-	   any voter belongs to a state and can be either Regular or Judge. The default is Regular.
-	   no default to the state.  vr1 can be defind also as
-	   Voter vr1("Israel", Regular);
-	*/
-
-	TEST("1.11")
-		cout << vr1.state() << endl;  // Israel
-	cout << (vr1.voterType() == Regular) << endl;  // 1 (bool)
-
-	cout << vr1 << endl;  // will display <Israel/Regular>
-
-	Voter vj1("Israel", Judge);
-	cout << (vj1.voterType() == Judge) << endl;  // 1
-	cout << vj1 << endl;  // will display <Israel/Judge>
-
-   //in the following there are other declarations of voters.
-
-	Voter vr2("Israel");
-	Voter vr3("UK");
-	Voter vr4("France");
-	Voter vr5("Australia");
-	Voter vr6("Cyprus", Regular);
-	Voter vj2("Israel", Judge);
-	Voter vj3("UK", Judge);
-	Voter vj4("France", Judge);
-	Voter vj5("Australia", Judge);
-	Voter vj6("Cyprus", Judge);
-
-	/* a voter can not vote for his own state.
-	   can vote for any other state, in condition that both
-	   his state and the state to vote for are registered and participate.
-	   otherwise the vote operation is just ignored without any other notice.
-	   a Regular voter votes each time for a single state. This state gets 1 point
-	   for each voting. The regular voter can vote more than once, but no more than max allowed times for voting,
-	   which is defined when declaring the MainControl system. Default is 5.
-	   Moreover, he can vote all the times for the same state, or he can vote
-	   each time for a different state, in condition he does not exceed the allowed
-	   limit of max times of voting.
-	   a Judge voter can vote only ONCE, no more. all additions votings of his are
-	   just ignored without furthere notification.
-	   in contradiction to a regular voter, he can give a list of 1 to 10 different state names.
-	   the points given to the states are according to the order they are mentioned :
-	   first state gets 12 points, second 10 points, third 8 points and so on.
-	   if there less than 10 states, then only the given states get points, starting from 12,
-	   according to their order.
-	   if there are states that are not registered in the system, they are ignored.
-	   in any case, the points to every state are given regarding its absolute order number,
-	   no matter if previous states in the list are not legal.
-	   remark - we assume that the list for a Judge voter does not have states that appear
-	   more than once. No need to check this.
-	*/
-
-	TEST("1.12")
-		eurovision += Vote(vr1, "Israel"); // Illegal. Not counted. vr1 is from Israel, therefore
-										   // is NOT allowed to vote for Israel.
-	cout << eurovision << endl;
-
-	/*
-	in the Voting phase we'll get here
-	first line - the phase name
-	other lines - all states are displayed sorted by state names, each state in a different line.
-	in each line we get
-	<state_name> : Regular(<num of points for regular votes>) 
-	(<num of points for Judge votes>)
-	*/
-
-	TEST("1.13")
-		((((eurovision += Vote(vr1, "Cyprus")) += Vote(vr1, "Cyprus")) += Vote(vr1, "Cyprus")) += Vote(vr1, "Cyprus")) += Vote(vr1, "Cyprus");
-	cout << eurovision << endl;
-
-	TEST("1.14")
-		eurovision += Vote(vr1, "Cyprus"); /* Not counted. vr1 has already exceeded
-		max allowed times for voting (5 in this case) */
-
-	cout << eurovision << endl;
-
-	cout << vr1.timesOfVotes() << endl;  // 5
-
-	++vr1; // this operation increments the number of times that vr1 has voted.
-		   // although it's a public method, we assume that it will be use ONLY internally
-		   // by other relevant operations, specially when vr21 votes successfully and needs
-		   // to count the number of times he has voted.
-		   // NO operation of --vr1 is given.
-
-
-	TEST("1.15")
-		((((eurovision += Vote(vr5, "Australia")) += Vote(vr5, "Israel")) += Vote(vr5, "Cyprus")) += Vote(vr5, "UK")) +=
-		Vote(vr5, "Australia");
-	cout << eurovision << endl;
-
-	TEST("1.16")
-		eurovision += Vote(vr5, "Cyprus"); /* Not counted. vr5 has already exceeded max allowed times for voting */
-	cout << eurovision << endl;
-
-	TEST("1.17")
-		eurovision += Vote(vj1, "Cyprus", "UK", "Australia");
-	/* example of voting of a Judge */
-	cout << eurovision << endl;
-
-	return 0;
 }

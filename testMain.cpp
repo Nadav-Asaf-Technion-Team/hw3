@@ -1,39 +1,34 @@
-//#include <iostream>
-//
-//#include "eurovision.h"
-//
-//using std::cout;
-//using std::endl;
-//
-//int main() {
-//	MainControl eurovision;
-//	Participant p1("Israel", "Song_Israel", 175, "Singer_Israel");
-//	Participant p2("UK", "Song_UK", 170, "Singer_UK");
-//	Participant p3("France", "Song_France", 190, "Singer_France");
-//	Participant p4("Australia", "Song_Australia", 180, "Singer_Australia");
-//	Participant p5("Cyprus", "Song_Cyprus", 172, "Singer_Cyprus");
-//	((((eurovision += p1) += p2) += p3) += p4) += p5;
-//	cout << eurovision << endl;
-//	eurovision -= p1;
-//	cout << eurovision << endl;
-//	eurovision.setPhase(Contest);
-//	cout << endl << "+++++++++++++++++++" << endl;
-//	cout << "israel: " << eurovision.participate("Israel") << endl;
-//	cout << "ginea: " << eurovision.participate("ginea") << endl;
-//	eurovision.setPhase(Voting);
-//	cout << eurovision;
-//	cout << endl << "+++++++++++++++++++" << endl;
-//	Voter vr2("Israel");
-//	Voter vr3("UK");
-//	Voter vr4("France");
-//	Voter vr5("Australia");
-//	Voter vr6("Cyprus", Regular);
-//	Voter vj2("Israel", Judge);
-//	Voter vj3("UK", Judge);
-//	Voter vj4("France", Judge);
-//	Voter vj5("Australia", Judge);
-//	Voter vj6("Cyprus", Judge);
-//	Vote vote = Vote(vr2, "France");
-//	eurovision += vote;
-//	return 0;
-//}
+#include <cstdio>
+#include <string.h>
+#include <fstream>
+#include <cstdlib>
+#include "test5.cpp"
+#include "test10.cpp"
+#include "test1.cpp"
+#include "test2.cpp"
+#include "test3.cpp"
+#include "test4.cpp"
+#include "test6.cpp"
+#include "test7.cpp"
+#include "test8.cpp"
+#include "test9.cpp"
+#include <stdio.h>
+int main() {
+	string line1, line2;
+	std::ifstream File2;
+	std::ifstream File1;
+	int pass = 1;
+	TEST1();
+	File1.open("../test1myresult.txt");
+	File2.open("../test1result.txt");
+	while (!File1.eof() || !File2.eof()) {
+		getline(File1, line1);
+		getline(File2, line2);
+		if (line1 != line2) {
+			pass = 0;
+		}
+	}
+	File1.close();
+	File2.close();
+	pass ? std::cout << "TEST 1 PASSED\n" : std::cout << "TEST 1 FAILED" << std::endl;
+}

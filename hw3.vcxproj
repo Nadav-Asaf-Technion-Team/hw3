@@ -20,11 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="eurovision.h" />
+    <ClInclude Include="seat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eurovision.cpp" />
-    <ClCompile Include="test1.cpp" />
-    <ClCompile Include="testMain.cpp" />
+    <ClCompile Include="seat.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
