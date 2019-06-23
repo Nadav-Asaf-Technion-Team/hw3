@@ -83,7 +83,7 @@ string FrontRegularSeat::location() {
 	return str;
 }
 
-MiddleRegularSeat::MiddleRegularSeat(char area, int line, int chair, int base) : 
+MiddleRegularSeat::MiddleRegularSeat(char area, int line, int chair, int base): 
 	RegularSeat(area, line, chair, base) {
 	totalPrice += 250;
 }
