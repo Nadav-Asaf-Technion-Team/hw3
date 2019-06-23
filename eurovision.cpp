@@ -106,8 +106,9 @@ Vote::Vote(Voter& voter, const string state0, const string state1,
 	states[9] = state9;
 }
 
-MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
-	phase(Registration), maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes),
+MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes): 
+	phase(Registration), maxTimeLength(maxTimeLength),
+	maxParticipants(maxParticipants), maxVotes(maxVotes),
 	participantsAmount(0) ,contenders(new Contender[maxParticipants]) {
 }
 
@@ -275,11 +276,13 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 }
 
 
-MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
+MainControl::Contender::Contender(Participant* p, int regularVotes,
+	int judgeVotes) : 
 	participant(p), regularVotes(regularVotes),
 		judgeVotes(judgeVotes) {}
 
-MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
+MainControl::Contender::Contender() :participant(NULL), regularVotes(0),
+	judgeVotes(0) {
 }
 
 string MainControl::Contender::getState() const{
@@ -337,7 +340,8 @@ string MainControl::operator()(int i, VoterType type) {
 	for (int i = 0; i < participantsAmount; i++) {
 		vector.push_back(contenders[i]);
 	}
-	std::vector<Contender>::iterator iter = get<std::vector<Contender>::iterator, Contender, Contender::Max>
+	std::vector<Contender>::iterator iter = 
+		get<std::vector<Contender>::iterator, Contender, Contender::Max>
 		(vector.begin(),vector.end(), max, i);
 	if (iter == vector.end()) return "";
 	return (*iter).getState();
@@ -346,7 +350,8 @@ string MainControl::operator()(int i, VoterType type) {
 MainControl::Contender::Max::Max(VoterType type) : type(type) {
 }
 
-bool MainControl::Contender::Max::operator()(const Contender& c1, const Contender& c2) {
+bool MainControl::Contender::Max::operator()(const Contender& c1,
+	const Contender& c2) {
 	if (type == Regular) {
 		if (c1.getRegularVotes() == c2.getRegularVotes()) {
 			return (c1.getState() > c2.getState()); // if equal score, compare by state name
