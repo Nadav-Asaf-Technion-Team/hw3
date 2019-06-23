@@ -182,6 +182,33 @@ MainControl& MainControl::operator-=(Participant& participant) {
 	return *this;
 }
 
+static int givePoints(int i) {
+	int points = 0;
+	switch (i) {
+	case 0: points = 12;
+		break;
+	case 1: points = 10;
+		break;
+	case 2: points = 8;
+		break;
+	case 3: points = 7;
+		break;
+	case 4: points = 6;
+		break;
+	case 5: points = 5;
+		break;
+	case 6: points = 4;
+		break;
+	case 7: points = 3;
+		break;
+	case 8: points = 2;
+		break;
+	case 9: points = 1;
+		break;
+	}
+	return points;
+}
+
 MainControl& MainControl::operator+=(Vote vote) {
 	if (phase != Voting) return *this;
 	bool flag = false;
@@ -201,29 +228,7 @@ MainControl& MainControl::operator+=(Vote vote) {
 			int contenderIndex = findContender(vote.states[i]);
 			if (contenderIndex == -1) continue;
 			flag = true;
-			int points = 0;
-			switch (i) {
-			case 0: points = 12;
-				break;
-			case 1: points = 10;
-				break;
-			case 2: points = 8;
-				break;
-			case 3: points = 7;
-				break;
-			case 4: points = 6;
-				break;
-			case 5: points = 5;
-				break;
-			case 6: points = 4;
-				break;
-			case 7: points = 3;
-				break;
-			case 8: points = 2;
-				break;
-			case 9: points = 1;
-				break;
-			}
+			int points = givePoints(i);
 			contenders[contenderIndex].addJudgeVotes(points);
 		}
 	}
@@ -381,7 +386,7 @@ Iter MainControl::get(Iter begin, Iter end, Max max, int i) {
 	for (Iter it = begin; it < end; ++it) {
 		newVector.push_back(*it);
 	}
-	if (newVector.size() < i) return end;
+	if ((int)newVector.size() < i) return end;
 	sort(newVector.begin(), newVector.end(), max);
 	for (Iter res = begin; res < end; ++res) {
 		if (*res == newVector[i - 1]) return res;
