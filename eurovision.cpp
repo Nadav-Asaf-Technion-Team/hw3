@@ -8,38 +8,34 @@ using std::endl;
 using std::sort;
 using std::vector;
 
-Participant::Participant(string stateName, string songName, int songDuration,
-	string singerName) :
+
+Participant::Participant(string stateName, string songName, int songDuration, string singerName) :
 	stateName(stateName),
 	songName(songName),
 	songDuration(songDuration),
 	singerName(singerName),
 	registration(false){}
 
-// returns the state string of a participant
 string Participant::state() const {
 	return stateName;
 }
 
-// returns the song string of a participant
 string Participant::song() const {
 	return songName;
 }
 
-// returns the length of the song of a participant
 int Participant::timeLength() const {
 	return songDuration;
 }
-// returns the name string of a participant
+
 string Participant::singer() const {
 	return singerName;
 }
-// returns if the participant is registered or not
+
 int Participant::isRegistered() const {
 	return registration;
 }
 
-// allows the user to update the participants info, provided the participant is not registered
 void Participant::update(string songName, int songDuration, string singerName){
 	if ((*this).isRegistered()) return;
 	if (songName != "") {
@@ -53,60 +49,49 @@ void Participant::update(string songName, int songDuration, string singerName){
 	}
 }
 
-// allows the user to update if the participant is registered or not
 void Participant::updateRegistered(bool registration) {
 	this->registration = registration;
 }
 
-// prints the participant information
 ostream& operator<<(ostream& os, const Participant& participant) {
-	return os << '[' << participant.state() << '/' << participant.song()
-		<< '/' << participant.timeLength() << '/' << participant.singer() 
-		<< ']';
+	return os << '[' << participant.state() << '/' << participant.song() << '/' << participant.timeLength() <<
+		'/' << participant.singer() << ']';
 }
 
 Voter::Voter(string state, VoterType type) : 
 	type(type), voterState(state), timesVoted(0){
 }
 
-// returns the state string of a voter
 string Voter::state() const {
 	return voterState;
 }
 
-// returns the type string of a voter
 VoterType Voter::voterType() const {
 	return type;
 }
 
-// returns how many times the voter have voted
 int Voter::timesOfVotes() const {
 	return timesVoted;
 }
 
-// allows the user to increase the number of times that a voter have voted by 1
 Voter& Voter::operator++() {
 	++timesVoted;
 	return *this;
 }
 
-// prints the voter information
 ostream& operator<<(ostream& os, const Voter& voter) {
 	string type = "";
-	if (voter.voterType() == Regular) {
+	if (voter.voterType() == Regular)
 		type = "Regular";
-	}
-	else {
+	else
 		type = "Judge";
-	}
 	return os << '<' << voter.state() << '/' << type << '>';
 }
 
 
-Vote::Vote(Voter& voter, const string state0, const string state1,
-	const string state2, const string state3, const string state4,
-	const string state5 , const string state6, const string state7,
-	const string state8 , const string state9): voter(voter) {
+Vote::Vote(Voter& voter, const string state0, const string state1 , const string state2,
+	const string state3, const string state4, const string state5 , const string state6,
+	const string state7 , const string state8 , const string state9): voter(voter) {
 	states[0] = state0; 
 	states[1] = state1;
 	states[2] = state2;
@@ -119,17 +104,18 @@ Vote::Vote(Voter& voter, const string state0, const string state1,
 	states[9] = state9;
 }
 
-MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes): 
-	phase(Registration), maxTimeLength(maxTimeLength),
-	maxParticipants(maxParticipants), maxVotes(maxVotes),
+MainControl::MainControl(int maxTimeLength, int maxParticipants, int maxVotes) : 
+	phase(Registration), maxTimeLength(maxTimeLength), maxParticipants(maxParticipants), maxVotes(maxVotes),
 	participantsAmount(0) ,contenders(new Contender[maxParticipants]) {
 }
 
 MainControl::~MainControl() {
+	for (int i = 0; i < participantsAmount; i++) {
+		contenders[i].participant->updateRegistered(0);
+	}
 	delete[] contenders;
 }
 
-// allows the user to set the phase of the compatition
 void MainControl::setPhase(Phase newPhase) {
 	if (phase == Registration && newPhase == Voting) return;
 	if (phase == Contest && newPhase == Registration) return;
@@ -137,20 +123,14 @@ void MainControl::setPhase(Phase newPhase) {
 	phase = newPhase;
 }
 
-// checks if the participant under check is legal under the requirments set for the compatition
 int MainControl::legalParticipant(Participant participant) {
-	if (participant.song() == "" || participant.state() == ""
-		|| participant.singer() == "") {
+	if (participant.song() == "" || participant.state() == "" || participant.singer() == "")
 		return 0;
-	}
 	else if (participant.timeLength() > maxTimeLength)
 		return 0;
-	else {
-		return 1;
-	}
+	else return 1;
 }
 
-// checks if a participant is registered to the compatition in question
 int MainControl::participate(string state){
 	for (int i = 0; i < participantsAmount; i++) {
 		if (contenders[i].participant == NULL) return 0;
@@ -171,8 +151,6 @@ int MainControl::findContender(string state) {
 	}
 	return -1;
 }
-
-// allows the user to register a given participant to the compatition
 MainControl& MainControl::operator+=(Participant& participant) {
 	if (phase != Registration) return *this;
 	if (participantsAmount == maxParticipants) return *this;
@@ -183,14 +161,13 @@ MainControl& MainControl::operator+=(Participant& participant) {
 	participant.updateRegistered(1);
 	return *this;
 }
-
-// allows the user to unregister a participant from the compatition
 MainControl& MainControl::operator-=(Participant& participant) {
 	if (phase != Registration) return *this;
 	if (participantsAmount == 0) return *this;
 	if (!legalParticipant(participant)) return *this;
 	int flag = 0;
 	for (int i = 0; i < participantsAmount; i++) {
+		//if (participant.state() == (*(contenders[i].participant)).state()) flag = 1;
 		if (&participant == contenders[i].participant) flag = 1;
 		if (flag == 1) {
 			contenders[i] = contenders[i+1];
@@ -204,36 +181,6 @@ MainControl& MainControl::operator-=(Participant& participant) {
 	return *this;
 }
 
-//Function that gives points according to the location of a state
-//in the array of judge votes.
-static int givePoints(int i) {
-	int points = 0;
-	switch (i) {
-	case 0: points = 12;
-		break;
-	case 1: points = 10;
-		break;
-	case 2: points = 8;
-		break;
-	case 3: points = 7;
-		break;
-	case 4: points = 6;
-		break;
-	case 5: points = 5;
-		break;
-	case 6: points = 4;
-		break;
-	case 7: points = 3;
-		break;
-	case 8: points = 2;
-		break;
-	case 9: points = 1;
-		break;
-	}
-	return points;
-}
-
-//adds votes to participants (both regular and judge)
 MainControl& MainControl::operator+=(Vote vote) {
 	if (phase != Voting) return *this;
 	bool flag = false;
@@ -253,7 +200,29 @@ MainControl& MainControl::operator+=(Vote vote) {
 			int contenderIndex = findContender(vote.states[i]);
 			if (contenderIndex == -1) continue;
 			flag = true;
-			int points = givePoints(i);
+			int points = 0;
+			switch (i) {
+			case 0: points = 12;
+				break;
+			case 1: points = 10;
+				break;
+			case 2: points = 8;
+				break;
+			case 3: points = 7;
+				break;
+			case 4: points = 6;
+				break;
+			case 5: points = 5;
+				break;
+			case 6: points = 4;
+				break;
+			case 7: points = 3;
+				break;
+			case 8: points = 2;
+				break;
+			case 9: points = 1;
+				break;
+			}
 			contenders[contenderIndex].addJudgeVotes(points);
 		}
 	}
@@ -261,15 +230,13 @@ MainControl& MainControl::operator+=(Vote vote) {
 	return *this;
 }
 
-//swaps 2 contenders in MainControl's contenders array
-//(used for sorting the array)
+
 void MainControl::Swap(Contender& a, Contender& b) {
 	Contender t(a);
 	a = b;
 	b = t;
 }
 
-//sorts contenders array by name
 void MainControl::BubbleSort(Contender* arr, int n) {
 	int swapped = 1, i = 1;
 	while (swapped) {
@@ -283,8 +250,6 @@ void MainControl::BubbleSort(Contender* arr, int n) {
 	}
 }
 
-//prints MainControl object.
-//divided to cases according to the current phase. 
 ostream& operator<<(ostream& os, const MainControl& eurovision) {
 	os << '{' << endl;
 	if (eurovision.phase == Registration) {
@@ -298,10 +263,9 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 	else{
 		os << "Voting" << endl;
 		for(int i = 0; i < eurovision.participantsAmount; i++) {
-			 os << (*(eurovision.contenders[i].participant)).state() << " : "
-				<< "Regular(" << eurovision.contenders[i].getRegularVotes() 
-				<< ") Judge(" << eurovision.contenders[i].getJudgeVotes()
-				<< ')' << endl;
+			 os << (*(eurovision.contenders[i].participant)).state() << " : " << "Regular("
+				<< eurovision.contenders[i].getRegularVotes() << ") Judge("
+				<< eurovision.contenders[i].getJudgeVotes() << ')' << endl;
 		}
 	}
 	os << "}" << endl;
@@ -309,55 +273,39 @@ ostream& operator<<(ostream& os, const MainControl& eurovision) {
 
 }
 
-MainControl::Contender::Contender(Participant* p, int regularVotes,
-	int judgeVotes) : 
+
+MainControl::Contender::Contender(Participant* p, int regularVotes, int judgeVotes) : 
 	participant(p), regularVotes(regularVotes),
 		judgeVotes(judgeVotes) {}
 
-MainControl::Contender::Contender() :participant(NULL), regularVotes(0),
-	judgeVotes(0) {
+MainControl::Contender::Contender() :participant(NULL), regularVotes(0), judgeVotes(0) {
 }
 
-//returns the state name of the participant linked to a contender
 string MainControl::Contender::getState() const{
 		return (*participant).state();
 	}
-
-//returns the votes from regular voters given to a participant linked 
-//to the contender
 int MainControl::Contender::getRegularVotes() const {
 		return regularVotes;
 	}
-
-//returns the votes from judges given to a participant linked 
-//to the contender
 int MainControl::Contender::getJudgeVotes() const {
 		return judgeVotes;
 	}
-
-//adds regular voters' votes to the contender
 void MainControl::Contender::addRegularVotes(int newVotes) {
 		regularVotes += newVotes;
 	}
-
-//adds judges' votes to the contender
 void MainControl::Contender::addJudgeVotes(int newVotes) {
 		judgeVotes += newVotes;
 	}
-
-//checks if two contenders point to a state with the same name. 
 bool MainControl::Contender::operator==(const Contender& c) const {
 	return (participant == c.participant);
 }
 
 MainControl::Iterator::Iterator() : eurovision(NULL), index(0) {}
 
-//returns iterator to the beginning of the contenders array
 MainControl::Iterator MainControl::begin() const {
 	return Iterator(this, 0);
 }
 
-//returns iterator to the end of the contenders array
 MainControl::Iterator MainControl::end() const {
 	return Iterator(this, participantsAmount);
 }
@@ -365,37 +313,30 @@ MainControl::Iterator MainControl::end() const {
 MainControl::Iterator::Iterator(const MainControl* eurovision, int index) : 
 	eurovision(eurovision), index(index) {}
 
-//checks if left hand iterator is smaller than right hand iterator
 bool MainControl::Iterator::operator<(const MainControl::Iterator& it) const {
 	return (index < it.index);
 }
 
-//returns a participant reference to the participant the itartor is currently
-//pointing at
 const Participant& MainControl::Iterator::operator*() const {
 	return *(eurovision->contenders[index].participant);
 }
 
-//moves the iterator forward. 
 MainControl::Iterator& MainControl::Iterator::operator++() {
 	++index;
 	return *this;
 }
 
-//checks if 2 iterators point to the same element
 bool MainControl::Iterator::operator==(const MainControl::Iterator& it) const {
 	return (index == it.index);
 }
 
-//returns the name of the participant that's ranked i
 string MainControl::operator()(int i, VoterType type) {
 	Contender::Max max(type);
 	vector<Contender> vector;
 	for (int i = 0; i < participantsAmount; i++) {
 		vector.push_back(contenders[i]);
 	}
-	std::vector<Contender>::iterator iter = 
-		get<std::vector<Contender>::iterator, Contender, Contender::Max>
+	std::vector<Contender>::iterator iter = get<std::vector<Contender>::iterator, Contender, Contender::Max>
 		(vector.begin(),vector.end(), max, i);
 	if (iter == vector.end()) return "";
 	return (*iter).getState();
@@ -404,24 +345,18 @@ string MainControl::operator()(int i, VoterType type) {
 MainControl::Contender::Max::Max(VoterType type) : type(type) {
 }
 
-//Functor, returns true if left hand argument is greater
-bool MainControl::Contender::Max::operator()(const Contender& c1,
-	const Contender& c2) {
+bool MainControl::Contender::Max::operator()(const Contender& c1, const Contender& c2) {
 	if (type == Regular) {
 		if (c1.getRegularVotes() == c2.getRegularVotes()) {
 			return (c1.getState() > c2.getState()); // if equal score, compare by state name
 		}
-		else {
-			return (c1.getRegularVotes() > c2.getRegularVotes());
-		}
+		else return (c1.getRegularVotes() > c2.getRegularVotes());
 	}
 	else if (type == Judge) {
 		if (c1.getJudgeVotes() == c2.getJudgeVotes()) {
 			return (c1.getState() > c2.getState());
 		}
-		else {
-			return (c1.getJudgeVotes() > c2.getJudgeVotes());
-		}
+		else return (c1.getJudgeVotes() > c2.getJudgeVotes());
 	}
 	else {
 		int sum1 = c1.getJudgeVotes() + c1.getRegularVotes();
@@ -429,13 +364,10 @@ bool MainControl::Contender::Max::operator()(const Contender& c1,
 		if (sum1 == sum2) {
 			return (c1.getState() > c2.getState());
 		}
-		else {
-			return (sum1 > sum2);
-		}
+		else return (sum1 > sum2);
 	}
 }
 
-//returns the i-th largest in a container (where i is a natural number)
 template<class Iter, class T, class Max>
 Iter MainControl::get(Iter begin, Iter end, Max max, int i) {
 	if (i <= 0) return end;
@@ -443,7 +375,7 @@ Iter MainControl::get(Iter begin, Iter end, Max max, int i) {
 	for (Iter it = begin; it < end; ++it) {
 		newVector.push_back(*it);
 	}
-	if ((int)newVector.size() < i) return end;
+	if (newVector.size() < i) return end;
 	sort(newVector.begin(), newVector.end(), max);
 	for (Iter res = begin; res < end; ++res) {
 		if (*res == newVector[i - 1]) return res;
